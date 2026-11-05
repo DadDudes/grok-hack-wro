@@ -59,3 +59,11 @@ Kept, rejected (binding) and open questions, one block per round.
 - Join a friend (K-07) is shown in the promo video with an "Adding soon" badge; it is not built yet.
 - Book v0.1 now has 38 pages: 6.2 web app mashup, 6.3 flow map (9 steps), 6.4 to 6.7 key web screens. Rebuild: python3 brandbook/_src/book_flow.py.
 - Owner approved book v0.1 with the web flow and asked for the PDF export (overrides the earlier no-PDF note for this version).
+
+## Agent roles in the app (2026-11-05)
+
+- Prof is the parent's agent: "What does your child want or need to learn?" It turns the parent's free text into one clear, age-appropriate goal and 10 tasks.
+- Spark is the kid's agent: "How can the game be made for this topic?" It knows the parent's topic and offers 2-3 game types whose mechanic practises that topic, in the kid's theme.
+- Tasks are always invented by the agents; demo data only in mock mode.
+- The engine receives enriched readable text prompts with a Visual style line (docs/engine-prompts.md).
+- Banners (cover, vertical, README) use the campaign hook "Screen time is huge. Learning time isn't." as a white sticker and a sun pill. The brand slogan stays "Parents pick the topic. Kids pick the game."; the app splash keeps the slogan.
