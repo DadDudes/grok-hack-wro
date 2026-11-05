@@ -219,20 +219,18 @@ screens use Fredoka at 18 px and up.
 
 ## Demo
 
-**Video (30-45 s):** link coming soon.
+**Promo video (53 s, with sound).** Click the poster to play it.
 
-<img
-  src="brandbook/assets/banners/cover-1920x1080.png"
+[![EduBotGames promo video: Parents pick the topic. Kids pick the game.](docs/promo/poster.png)](docs/promo/edubotgames-promo.mp4)
+
+<video
+  src="docs/promo/edubotgames-promo.mp4"
+  poster="docs/promo/poster.png"
+  controls
   width="100%"
-  alt="EduBotGames cover: the logo, the slogan and Robo on teal"
->
+></video>
 
-| Time | What you see |
-|---|---|
-| 0-8 s | The parent types "multiplication to 50", the kid says "dinosaurs in space". |
-| 8-18 s | The agent timeline lights up and the game appears. |
-| 18-35 s | Two kids play, Robo gives a hint, the answer is right. |
-| 35-45 s | The parent panel shows 40% to 75%. "AI that teaches, not cheats." |
+![EduBotGames teaser: the AI agents build the game live](docs/promo/edubotgames-promo-preview.gif)
 
 The 40% to 75% jump is example data for the demo. Join a friend appears in the video with an
 "Adding soon" badge.
