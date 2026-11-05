@@ -7,6 +7,9 @@ dist/
 .env.*.local
 *.tsbuildinfo
 .DS_Store
+test-results/
+playwright-report/
+blob-report/
 supabase/.temp/
 supabase/.branches/
 __pycache__/

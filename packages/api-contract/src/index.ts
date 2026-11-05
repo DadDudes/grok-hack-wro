@@ -6,8 +6,11 @@ export {
   createGameRequestSchema,
   fieldErrorSchema,
   gameGraphicsSchema,
+  gameResultRequestSchema,
+  gameResultResponseSchema,
   gameSchema,
   gameStatusSchema,
+  gameTemplateSchema,
   healthResponseSchema,
   promptLimits,
 } from './schemas.ts';
@@ -18,6 +21,9 @@ export type {
   FieldError,
   Game,
   GameGraphics,
+  GameResultRequest,
+  GameResultResponse,
   GameStatus,
+  GameTemplate,
   HealthResponse,
 } from './types.ts';

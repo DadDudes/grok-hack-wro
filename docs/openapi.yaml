@@ -5,7 +5,8 @@ info:
   description: |
     Backend contract for generated learning games. The TypeScript schemas in
     `packages/api-contract` are the source of truth. This document mirrors them.
-    Generation, image upload, and per-game deployment are stubbed.
+    POST /api/games returns 202 and finishes in the background. A ready gameUrl
+    is GET /play/{id}, which serves a Phaser 3 page as text/html.
 servers:
   - url: http://localhost:3001
     description: Local `npm run dev`
@@ -44,10 +45,9 @@ paths:
       operationId: createGame
       summary: Create a game from a learning goal and a child's description
       description: |
-        Validates the body and returns the game record. The stub finishes
-        inline and returns `status: ready` with placeholder URLs. A later
-        async pipeline may return `queued` instead. Poll `GET /api/games/{id}`
-        until `ready` or `failed`. `201` means the row was stored. Read `status`.
+        Validates the body, stores a queued game, and schedules generation.
+        Poll `GET /api/games/{id}` until `ready` or `failed`. `202` means the
+        row was stored. Read `status`. When ready, `gameUrl` is `GET /play/{id}`.
       requestBody:
         required: true
         content:
@@ -60,8 +60,8 @@ paths:
               childAge: 10
               language: pl
       responses:
-        '201':
-          description: Game row stored. Inspect `status`.
+        '202':
+          description: Game row stored with status queued. Inspect `status` on GET.
           content:
             application/json:
               schema:
@@ -105,7 +105,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Game'
         '400':
-          description: `id` is not a UUID.
+          description: "id is not a UUID."
           content:
             application/json:
               schema:
@@ -129,6 +129,81 @@ paths:
       responses:
         '204':
           description: CORS headers only.
+  /api/games/{id}/results:
+    post:
+      tags: [games]
+      operationId: postGameResult
+      summary: Store the score from the end screen
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GameResultRequest'
+      responses:
+        '200':
+          description: Result stored.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameResultResponse'
+        '400':
+          description: The id or the body failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: No game with that id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /play/{id}:
+    get:
+      tags: [games]
+      operationId: playGame
+      summary: Serve the Phaser game as HTML
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: assets
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [shapes]
+          description: When `shapes`, image URLs are omitted for this response only.
+      responses:
+        '200':
+          description: HTML. A ready game is playable. Other statuses explain themselves.
+          content:
+            text/html:
+              schema:
+                type: string
+        '400':
+          description: The id is not a UUID.
+          content:
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: Unknown game, or a ready game with no spec.
+          content:
+            text/html:
+              schema:
+                type: string
 components:
   schemas:
     CreateGameRequest:
@@ -158,6 +233,37 @@ components:
     GameStatus:
       type: string
       enum: [queued, generating, ready, failed]
+    GameTemplate:
+      type: string
+      enum: [collect, runner, quiz]
+    GameResultRequest:
+      type: object
+      additionalProperties: false
+      required: [score, total, correct]
+      properties:
+        score:
+          type: integer
+          minimum: 0
+          maximum: 1000
+        total:
+          type: integer
+          minimum: 1
+          maximum: 100
+        correct:
+          type: integer
+          minimum: 0
+          maximum: 100
+        durationMs:
+          type: integer
+          minimum: 0
+          maximum: 3600000
+    GameResultResponse:
+      type: object
+      required: [ok]
+      properties:
+        ok:
+          type: boolean
+          const: true
     GameGraphics:
       type: object
       required: [thumbnailUrl, coverUrl, assetUrls]
@@ -180,6 +286,7 @@ components:
         - childAge
         - language
         - status
+        - template
         - gameUrl
         - graphics
         - error
@@ -199,9 +306,14 @@ components:
           type: [string, 'null']
         status:
           $ref: '#/components/schemas/GameStatus'
+        template:
+          oneOf:
+            - $ref: '#/components/schemas/GameTemplate'
+            - type: 'null'
+          description: Null until generation has chosen a template.
         gameUrl:
           type: [string, 'null']
-          description: Public URL of the playable game. Null until status is ready.
+          description: Absolute GET /play/{id} URL. Null until status is ready.
         graphics:
           $ref: '#/components/schemas/GameGraphics'
         error:

@@ -9,7 +9,8 @@
     "dev": "npm run dev --workspace @grok-hack/api",
     "build": "npm run typecheck --workspace @grok-hack/api-contract && npm run build --workspace @grok-hack/api",
     "typecheck": "npm run typecheck --workspace @grok-hack/api-contract && npm run typecheck --workspace @grok-hack/api",
-    "test": "npm run test --workspace @grok-hack/api-contract",
+    "test": "npm run test --workspace @grok-hack/api-contract && npm run test --workspace @grok-hack/api",
+    "exercise": "npm run exercise --workspace @grok-hack/api",
     "start": "npm run start --workspace @grok-hack/api"
   },
   "engines": {

@@ -13,7 +13,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           body {
             font-family: ui-sans-serif, system-ui, sans-serif;
             margin: 1.5rem;
-            max-width: 42rem;
+            max-width: 70rem;
             color: #111;
           }
           label { display: block; margin: 0.75rem 0 0.25rem; }
@@ -23,6 +23,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           button { margin-top: 1rem; }
           pre { overflow: auto; padding: 0.75rem; background: #f3f3f3; }
           img { max-width: 100%; height: auto; background: #f3f3f3; }
+          iframe { width: 100%; height: 70vh; border: 1px solid #ccc; margin-top: 0.5rem; background: #111; }
         `}</style>
         {children}
       </body>

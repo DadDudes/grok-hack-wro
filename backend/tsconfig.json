@@ -26,6 +26,9 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "@grok-hack/api-contract": [
+        "./vendor/api-contract/src/index.ts"
       ]
     }
   },

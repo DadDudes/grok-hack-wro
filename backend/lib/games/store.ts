@@ -7,6 +7,7 @@ import { SupabaseGameRepository } from './supabase-repository';
 let warned = false;
 
 export function getGameRepository(): GameRepository {
+  if (process.env.GAME_STORE === 'memory') return memoryGameRepository;
   const client = getSupabaseAdmin();
   if (!client) {
     if (!warned) {
