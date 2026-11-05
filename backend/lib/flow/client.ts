@@ -46,13 +46,15 @@ async function postJson<T>(path: string, body: unknown): Promise<T> {
   return data;
 }
 
-export async function createPlan(goal: Goal): Promise<TaskPlan> {
+export async function createPlan(goal: Goal, feedback?: string): Promise<TaskPlan> {
   if (isMockMode()) {
     await wait(MOCK_DELAY_MS);
     return { ...demoPlan, goal: goal.topic, age: goal.age };
   }
 
-  return postJson<TaskPlan>(flowPaths.prof, goal);
+  const note = feedback?.trim();
+  const body = note ? { ...goal, feedback: note } : goal;
+  return postJson<TaskPlan>(flowPaths.prof, body);
 }
 
 export async function suggestGames(request: SparkRequest): Promise<SparkResponse> {

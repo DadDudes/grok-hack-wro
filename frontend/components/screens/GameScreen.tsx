@@ -4,8 +4,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useEffectEvent, useRef, useState } from 'react';
 import { askRobo } from '@/lib/flow/client';
+import { applyHint, beginHint, createHintTurn, invalidateHint, noteAnswer, resetHint } from '@/lib/flow/hintTurn';
 import type { GameEvent, HintRequest, KidProfile, Task, TaskPlan } from '@/lib/flow/types';
-import { Agent, type AgentPose } from '../Agent';
+import { Agent } from '../Agent';
 import { Icon, StarIcon } from '../Icon';
 import { KidAvatar } from '../KidAvatar';
 import { KidShell } from '../kid/KidShell';
@@ -23,11 +24,6 @@ const HINT_FAILED_LINE = 'Oops, my hint got lost. Want me to try again?';
 const CHEER_LINES = ['Yes! Team score up!', 'Great job, NAME!', 'Super! Keep going!', 'You got it, NAME!'];
 const NAME_SLOT = 'NAME';
 const GAME_SANDBOX = 'allow-scripts allow-same-origin allow-pointer-lock';
-
-type RoboLine = {
-  pose: AgentPose;
-  text: string;
-};
 
 type AppMessage =
   | { source: typeof APP_SOURCE; type: 'start'; tasks: Task[]; players: string[] }
@@ -96,7 +92,10 @@ export function GameScreen() {
   const { ready, state, actions, kid, kids } = useKidContext();
   const frameRef = useRef<HTMLIFrameElement>(null);
   const finishedRef = useRef(false);
-  const [robo, setRobo] = useState<RoboLine>({ pose: 'idle', text: WELCOME_LINE });
+  const [hintTurn, setHintTurn] = useState(() => createHintTurn(WELCOME_LINE));
+  const hintTurnRef = useRef(hintTurn);
+  const sessionStampRef = useRef(state.startedAt);
+  sessionStampRef.current = state.startedAt;
   const [turn, setTurn] = useState<string | null>(null);
   const [paused, setPaused] = useState(false);
   const [failedHint, setFailedHint] = useState<HintRequest | null>(null);
@@ -118,6 +117,18 @@ export function GameScreen() {
     }
   }, [needsSession, startSession]);
 
+  function commitHint(next: typeof hintTurn): void {
+    hintTurnRef.current = next;
+    setHintTurn(next);
+  }
+
+  useEffect(() => {
+    commitHint(resetHint(hintTurnRef.current, WELCOME_LINE));
+    return () => {
+      hintTurnRef.current = invalidateHint(hintTurnRef.current);
+    };
+  }, [state.startedAt]);
+
   function sendToGame(message: AppMessage): void {
     const target = frameRef.current?.contentWindow;
 
@@ -134,6 +145,7 @@ export function GameScreen() {
     }
 
     finishedRef.current = true;
+    commitHint(invalidateHint(hintTurnRef.current));
     const session = actions.finishSession();
 
     if (session !== null && state.goalId !== null) {
@@ -144,13 +156,25 @@ export function GameScreen() {
   }
 
   async function askForHint(request: HintRequest): Promise<void> {
-    setRobo({ pose: 'working', text: THINKING_LINE });
+    const begun = beginHint(hintTurnRef.current, THINKING_LINE);
+    const sessionStamp = sessionStampRef.current;
+    commitHint(begun.turn);
     setFailedHint(null);
 
     try {
       const hint = await askRobo(request);
+      if (sessionStampRef.current !== sessionStamp) {
+        return;
+      }
+
+      const applied = applyHint(hintTurnRef.current, begun.requestId, hint.text, 'idle');
+
+      if (!applied.applied) {
+        return;
+      }
+
       actions.addHint();
-      setRobo({ pose: 'idle', text: hint.text });
+      commitHint(applied.turn);
       sendToGame({ source: APP_SOURCE, type: 'hint', text: hint.text });
 
       if (hint.nextPlayer !== null) {
@@ -158,7 +182,17 @@ export function GameScreen() {
       }
     } catch (error) {
       console.warn(errorMessage(error));
-      setRobo({ pose: 'idle', text: HINT_FAILED_LINE });
+      if (sessionStampRef.current !== sessionStamp) {
+        return;
+      }
+
+      const applied = applyHint(hintTurnRef.current, begun.requestId, HINT_FAILED_LINE, 'idle');
+
+      if (!applied.applied) {
+        return;
+      }
+
+      commitHint(applied.turn);
       setFailedHint(request);
     }
   }
@@ -189,7 +223,7 @@ export function GameScreen() {
     if (event.correct === true) {
       const correctCount = countCorrect(events);
       setFailedHint(null);
-      setRobo({ pose: 'done', text: cheerLine(correctCount, player) });
+      commitHint(noteAnswer(hintTurnRef.current, cheerLine(correctCount, player), 'done'));
       return;
     }
 
@@ -224,7 +258,7 @@ export function GameScreen() {
   const taskIndex = currentTaskIndex(activePlan, state.events);
   const task = activePlan.tasks[taskIndex];
   const questionClass = task !== undefined && task.question.length > LONG_QUESTION_LENGTH ? 'long' : '';
-  const roboMotion = robo.pose === 'working' ? 'work' : 'bob';
+  const roboMotion = hintTurn.bubble.pose === 'working' ? 'work' : 'bob';
 
   function handleFrameLoad(): void {
     sendToGame({ source: APP_SOURCE, type: 'start', tasks: activePlan.tasks, players });
@@ -329,8 +363,8 @@ export function GameScreen() {
         </section>
 
         <aside className="robo-coach" aria-label="Robo's hint">
-          <p className="say d robo hint-bubble" aria-live="polite" key={robo.text}>
-            {robo.text}
+          <p className="say d robo hint-bubble" aria-live="polite" key={hintTurn.bubble.text}>
+            {hintTurn.bubble.text}
           </p>
           {failedHint !== null && (
             <button className="cta sm fit" type="button" onClick={retryHint}>
@@ -338,7 +372,7 @@ export function GameScreen() {
               Try again
             </button>
           )}
-          <Agent agent="robo" pose={robo.pose} size="s240" motion={roboMotion} alt="Robo" />
+          <Agent agent="robo" pose={hintTurn.bubble.pose} size="s240" motion={roboMotion} alt="Robo" />
         </aside>
       </main>
     </KidShell>

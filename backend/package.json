@@ -13,7 +13,7 @@
     "build": "next build",
     "start": "next start --port 3001",
     "typecheck": "tsc --noEmit",
-    "test": "node scripts/sync-frontend.mjs --check && node --experimental-strip-types --import ./scripts/register-alias.mjs --test lib/game-spec/fallback.test.ts lib/game-spec/request-fields.test.ts lib/play/render-html.test.ts lib/games/pipeline.test.ts lib/agents/pedagog.test.ts lib/agents/local-fallback.test.ts",
+    "test": "node scripts/sync-frontend.mjs --check && node --experimental-strip-types --import ./scripts/register-alias.mjs --test lib/game-spec/fallback.test.ts lib/game-spec/request-fields.test.ts lib/play/render-html.test.ts lib/games/pipeline.test.ts lib/agents/pedagog.test.ts lib/agents/local-fallback.test.ts lib/flow/hintTurn.test.ts",
     "test:play": "playwright test",
     "smoke": "node scripts/smoke-unified.mjs",
     "exercise": "node --experimental-strip-types --import ./scripts/register-alias.mjs scripts/exercise-pipeline.ts"

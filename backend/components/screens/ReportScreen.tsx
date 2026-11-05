@@ -152,8 +152,9 @@ function ReportView({ plan, goal, kid, option, session, previous, goalId, action
     void loadReport();
   }, [loadReport]);
 
-  async function playAgain(): Promise<void> {
-    const nextPlan = await replan.run(() => createPlan(goal));
+  async function createNextPlan(): Promise<void> {
+    const feedback = report.state.status === 'done' ? report.state.data.pedagogueFeedback : undefined;
+    const nextPlan = await replan.run(() => createPlan(goal, feedback));
 
     if (nextPlan === null) {
       return;
@@ -180,7 +181,8 @@ function ReportView({ plan, goal, kid, option, session, previous, goalId, action
   const gameTitle = option?.title ?? 'The';
   const subtitle = `${goal.topic} · ${dayLabel(session)} · ${gameTitle} game with ${team}`;
   const isReplanning = replan.state.status === 'loading';
-  const playAgainLabel = isReplanning ? 'Prof is on it...' : 'Play again';
+  const reportSettled = report.state.status === 'done' || report.state.status === 'failed';
+  const nextPlanLabel = isReplanning ? 'Prof is making the next plan...' : 'Create next plan';
 
   return (
     <>
@@ -191,11 +193,11 @@ function ReportView({ plan, goal, kid, option, session, previous, goalId, action
         <button
           className="cta teal sm"
           type="button"
-          disabled={isReplanning}
-          onClick={() => void playAgain()}
+          disabled={isReplanning || !reportSettled}
+          onClick={() => void createNextPlan()}
         >
           <Icon name="refresh" />
-          {playAgainLabel}
+          {nextPlanLabel}
         </button>
       </PageHeader>
 
@@ -211,7 +213,7 @@ function ReportView({ plan, goal, kid, option, session, previous, goalId, action
           agent="prof"
           title="Prof could not make new tasks."
           text="The report is still here. Try again in a moment."
-          onRetry={() => void playAgain()}
+          onRetry={() => void createNextPlan()}
         />
       )}
 

@@ -70,6 +70,7 @@
   "lib/agents/spark.ts",
   "lib/agents/visual-style.ts",
   "lib/flow/client.ts",
+  "lib/flow/hintTurn.ts",
   "lib/flow/mock.ts",
   "lib/flow/types.ts",
   "lib/games-api/client.ts",

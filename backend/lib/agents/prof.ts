@@ -27,6 +27,8 @@ const PROF_INSTRUCTIONS = [
   '- Give each task a concrete skill label of 2 to 4 words that names the sub-skill, for example',
   '  "7x table", "reading the clock" or "word problems". Tasks that train the same thing share it.',
   '- Write the goal, questions, answers and skills in the language given by its code.',
+  '- If <pedagogue_feedback> is present, it is Lens\'s note for the next round. Practise those',
+  '  weak skills inside the same topic. Do not copy that note into a question.',
   UNTRUSTED_DATA_RULE,
   'Return only JSON that matches the schema.',
 ].join('\n');
@@ -79,27 +81,36 @@ function toTask(task: ModelTask, index: number): Task {
   };
 }
 
-function buildInput(goal: Goal): string {
-  return [
+function buildInput(goal: Goal, feedback?: string): string {
+  const lines = [
     taggedData('parent_text', goal.topic),
     `Kid age: ${goal.age}`,
     `Number of tasks: ${goal.questionCount}`,
     `Language code: ${goal.language}`,
-  ].join('\n');
+  ];
+  const note = feedback?.trim();
+
+  if (note) {
+    lines.push(taggedData('pedagogue_feedback', note));
+  }
+
+  return lines.join('\n');
 }
 
-export async function createTaskPlan(goal: Goal): Promise<AgentResult<TaskPlan>> {
+export async function createTaskPlan(input: Goal & { feedback?: string }): Promise<AgentResult<TaskPlan>> {
+  const { feedback, ...goal } = input;
+
   if (!xaiIsConfigured()) {
     return { data: localTaskPlan(goal), usage: [] };
   }
 
   const schema = planSchemaFor(goal.questionCount);
-  const input = buildInput(goal);
+  const modelInput = buildInput(goal, feedback);
 
   const result = await createStructuredResponse({
     agent: 'prof',
     instructions: PROF_INSTRUCTIONS,
-    input,
+    input: modelInput,
     schemaName: 'task_plan',
     schema,
     maxOutputTokens: PROF_MAX_OUTPUT_TOKENS,

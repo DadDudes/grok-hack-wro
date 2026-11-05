@@ -58,6 +58,10 @@ export const goalSchema = z.object({
   language: languageSchema,
 }) satisfies z.ZodType<Goal>;
 
+export const profRequestSchema = goalSchema.extend({
+  feedback: z.string().trim().max(requestLimits.topicMax).optional(),
+});
+
 export const taskSchema = z.object({
   id: trimmedText(requestLimits.idMax),
   question: trimmedText(requestLimits.questionMax),
