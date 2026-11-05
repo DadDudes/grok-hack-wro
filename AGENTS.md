@@ -70,6 +70,6 @@ uv run --with playwright python brandbook/_src/svg2png.py "$PWD/brandbook/assets
 
 - English in the product, the book and the code. No em or en dashes anywhere. No code comments.
 - Do not commit or push; the owner commits after testing. Ask before deleting any file.
-- Secrets live in `.env` (`GROK_BOT_API_KEY`), which is git-ignored.
+- Secrets live in `.env` (`XAI_API_KEY`, the name the backend reads; copy it to `backend/.env.local`), git-ignored.
 - Open pages in Brave, not Chrome. Check pages with the Claude in Chrome extension over
   `http://127.0.0.1`, never `file://`.
