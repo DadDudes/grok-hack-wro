@@ -1,0 +1,11 @@
+{
+  "brand": "#0A7D73",
+  "ink": "#13283A",
+  "paper": "#F3FBF9",
+  "display": "Fredoka",
+  "ui": "Figtree",
+  "heading": "Fredoka",
+  "display_weights": "500;600",
+  "ui_weights": "400;500;600;700",
+  "heading_weights": "500;600"
+}

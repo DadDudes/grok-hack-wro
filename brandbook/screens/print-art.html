@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>EduBotGames print artwork</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/brand.css">
+<style>
+body { margin: 0; background: #FFFFFF; font-family: var(--sans); color: var(--ink); display: flex; flex-direction: column; gap: 40px; padding: 40px; }
+.art { display: flex; box-sizing: border-box; flex: none; }
+#patch { width: 1176px; height: 708px; align-items: center; justify-content: center; background: transparent; }
+#patch img { width: 1100px; }
+#decal { width: 1264px; height: 708px; background: transparent; flex-direction: column; align-items: center; justify-content: center; gap: 44px; }
+#decal img { width: 660px; }
+#decal .line { font: 700 70px/1 var(--cond); }
+#yard { width: 1200px; height: 900px; padding: 70px 80px; flex-direction: column; justify-content: space-between; background: #FFFFFF; }
+#yard img { width: 400px; }
+#yard .big { font-family: var(--display); font-size: 150px; line-height: 0.9; letter-spacing: 0.01em; }
+#yard .big span { color: var(--brand); }
+#yard .small { font: 700 54px/1 var(--cond); display: flex; justify-content: space-between; border-top: 4px solid var(--ink); padding-top: 24px; }
+</style>
+</head>
+<body>
+<div class="art" id="patch"><img src="../img/logo/logo.svg" alt="EduBotGames"></div>
+<div class="art" id="decal"><img src="../img/logo/logo.svg" alt="EduBotGames"><div class="line" data-todo>Short tagline.</div></div>
+<div class="art" id="yard"><img src="../img/logo/logo.svg" alt="EduBotGames"><div class="big" data-todo>BIG<br><span>MESSAGE</span></div><div class="small"><span data-todo>Booked on EduBotGames</span><span data-todo>Category</span></div></div>
+</body>
+</html>

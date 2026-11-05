@@ -1,0 +1,28 @@
+:root {
+  --brand: #0A7D73;
+  --brand-text: #0A7D73;
+  --brand-tint: #DAECEA;
+  --on-brand: #FFFFFF;
+  --on-brand-muted: #EBF5F4;
+  --ink: #13283A;
+  --body: #324655;
+  --muted: #566773;
+  --on-dark-muted: #B0BCC0;
+  --paper: #F3FBF9;
+  --stone: #EBF4F2;
+  --white: #FFFFFF;
+  --line: #E2EBEA;
+  --line-strong: #D5DFDF;
+  --frame: #C6D1D3;
+  --gutter: #233747;
+  --success: #0C7F56;
+  --success-tint: #DDF0E7;
+  --warn: #92400E;
+  --warn-tint: #FDF0D5;
+  --danger: #B91C1C;
+  --danger-tint: #FBE3E3;
+  --display: "Fredoka", sans-serif;
+  --sans: "Figtree", system-ui, sans-serif;
+  --cond: "Fredoka", sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
