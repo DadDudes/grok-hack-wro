@@ -20,6 +20,20 @@ These files document the AI-assisted implementation work for the hackathon. They
 - `edubotgames-phaser-generation-pipeline.jsonl`: complete redacted JSONL transcript.
 - `edubotgames-phaser-generation-pipeline.md`: readable redacted transcript; tool results are truncated to 2,000 characters.
 
+## Brand, design and frontend: Claude Code session
+
+- Tool: Claude Code (main session plus Herdr sub-agents for the brand kit, screens, README and the
+  agent routes)
+- Session ID: `10a5f7b4-02b1-441a-be73-6aadde53c5c9`
+- Time range: **2026-11-05 18:48** to **21:03** (Europe/Warsaw, UTC+01:00)
+- Covered: brand exploration (PadBot logo, C4 Teal Lagoon palette, Fredoka and Figtree), the Brand
+  Guidelines 0.1 book, the web app screens, the agent crew (Robo, Prof, Spark, Doodle, Lens) and
+  their routes on the xAI Grok API, the Next.js frontend, the README, git work and the Supabase
+  learning tables.
+- `2026-11-05-edubotgames-session.md`: readable redacted transcript. User messages and assistant
+  replies in order, one line per tool call; tool outputs, thinking and system reminders are left
+  out. The raw session log stays outside the repo.
+
 ## Redaction
 
 Secrets and credential-like values were replaced with `[REDACTED]`. The final files were checked for exact, Base64-encoded, Base64URL-encoded, and URL-encoded known secret values, credential patterns, and signed-URL tokens, and were also scanned with Gitleaks. Non-secret project identifiers, including Supabase project references and Vercel project IDs, remain for technical context.
