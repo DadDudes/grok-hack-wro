@@ -1,0 +1,1223 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EduBotGames mobile screens</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Fredoka:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/screens.css" />
+    <link rel="stylesheet" href="../assets/ebg.css" />
+  </head>
+  <body>
+    <svg class="defs" width="0" height="0" aria-hidden="true">
+      <defs>
+        <symbol id="sb-signal" viewBox="0 0 18 12">
+          <rect x="0" y="8" width="3" height="4" rx="1" />
+          <rect x="5" y="5.5" width="3" height="6.5" rx="1" />
+          <rect x="10" y="3" width="3" height="9" rx="1" />
+          <rect x="15" y="0" width="3" height="12" rx="1" />
+        </symbol>
+        <symbol id="sb-wifi" viewBox="0 0 18 12">
+          <path
+            d="M9 2.2c2.6 0 5 1 6.8 2.7l1.2-1.3C14.9 1.6 12.1.4 9 .4S3.1 1.6 1 3.6l1.2 1.3C4 3.2 6.4 2.2 9 2.2zm0 3.7c1.6 0 3.1.6 4.2 1.7l1.2-1.3C13 4.9 11.1 4.1 9 4.1S5 4.9 3.6 6.3l1.2 1.3C5.9 6.5 7.4 5.9 9 5.9zm0 3.6c-.6 0-1.2.2-1.6.6L9 11.7l1.6-1.6c-.4-.4-1-.6-1.6-.6z"
+          />
+        </symbol>
+        <symbol id="sb-batt" viewBox="0 0 27 13">
+          <rect x="0.5" y="0.5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity="0.4" />
+          <rect x="2" y="2" width="20" height="9" rx="2" />
+          <rect x="25" y="4.5" width="2" height="4" rx="1" opacity="0.4" />
+        </symbol>
+
+        <symbol id="i-back" viewBox="0 0 24 24">
+          <path d="m12 19-7-7 7-7" />
+          <path d="M19 12H5" />
+        </symbol>
+        <symbol id="i-x" viewBox="0 0 24 24">
+          <path d="M18 6 6 18" />
+          <path d="m6 6 12 12" />
+        </symbol>
+        <symbol id="i-mic" viewBox="0 0 24 24">
+          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+          <path d="M12 19v3" />
+        </symbol>
+        <symbol id="i-keyboard" viewBox="0 0 24 24">
+          <rect width="20" height="16" x="2" y="4" rx="2" />
+          <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10" />
+        </symbol>
+        <symbol id="i-lock" viewBox="0 0 24 24">
+          <rect width="18" height="11" x="3" y="11" rx="2" />
+          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+        </symbol>
+        <symbol id="i-mail" viewBox="0 0 24 24">
+          <rect width="20" height="16" x="2" y="4" rx="2" />
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+        </symbol>
+        <symbol id="i-eye" viewBox="0 0 24 24">
+          <path d="M2.06 12.35a1 1 0 0 1 0-.7 10.75 10.75 0 0 1 19.88 0 1 1 0 0 1 0 .7 10.75 10.75 0 0 1-19.88 0" />
+          <circle cx="12" cy="12" r="3" />
+        </symbol>
+        <symbol id="i-plus" viewBox="0 0 24 24">
+          <path d="M5 12h14" />
+          <path d="M12 5v14" />
+        </symbol>
+        <symbol id="i-check" viewBox="0 0 24 24">
+          <path d="M20 6 9 17l-5-5" />
+        </symbol>
+        <symbol id="i-pencil" viewBox="0 0 24 24">
+          <path
+            d="M21.17 6.81a1 1 0 0 0-3.99-3.99L3.84 16.17a2 2 0 0 0-.5.83l-1.32 4.35a.5.5 0 0 0 .62.62l4.35-1.32a2 2 0 0 0 .83-.5z"
+          />
+        </symbol>
+        <symbol id="i-send" viewBox="0 0 24 24">
+          <path
+            d="M14.54 21.69a.5.5 0 0 0 .94-.03l6.5-19a.5.5 0 0 0-.64-.63l-19 6.5a.5.5 0 0 0-.02.93l7.93 3.18a2 2 0 0 1 1.11 1.11z"
+          />
+          <path d="m21.85 2.15-10.94 10.94" />
+        </symbol>
+        <symbol id="i-arrow" viewBox="0 0 24 24">
+          <path d="M5 12h14" />
+          <path d="m12 5 7 7-7 7" />
+        </symbol>
+        <symbol id="i-chev" viewBox="0 0 24 24">
+          <path d="m9 18 6-6-6-6" />
+        </symbol>
+        <symbol id="i-users" viewBox="0 0 24 24">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </symbol>
+        <symbol id="i-pause" viewBox="0 0 24 24">
+          <rect x="14" y="4" width="4" height="16" rx="1" />
+          <rect x="6" y="4" width="4" height="16" rx="1" />
+        </symbol>
+        <symbol id="i-spark" viewBox="0 0 24 24">
+          <path
+            d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.14-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.14a.5.5 0 0 1 .96 0L14.06 8.5a2 2 0 0 0 1.44 1.44l6.14 1.58a.5.5 0 0 1 0 .96L15.5 14.06a2 2 0 0 0-1.44 1.44l-1.58 6.14a.5.5 0 0 1-.96 0z"
+          />
+        </symbol>
+        <symbol id="i-refresh" viewBox="0 0 24 24">
+          <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+          <path d="M21 3v5h-5" />
+          <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+          <path d="M8 16H3v5" />
+        </symbol>
+        <symbol id="i-share" viewBox="0 0 24 24">
+          <path d="M12 2v13" />
+          <path d="m16 6-4-4-4 4" />
+          <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+        </symbol>
+        <symbol id="i-up" viewBox="0 0 24 24">
+          <path d="M16 7h6v6" />
+          <path d="m22 7-8.5 8.5-5-5L2 17" />
+        </symbol>
+        <symbol id="i-pad" viewBox="0 0 24 24">
+          <path d="M6 11h4M8 9v4M15 12h.01M18 10h.01" />
+          <path
+            d="M17.32 5H6.68a4 4 0 0 0-3.98 3.59C2.6 9.42 2 14.46 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.41-1.41A2 2 0 0 1 9.83 16h4.34a2 2 0 0 1 1.41.59L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.54-.6-6.58-.69-7.26A4 4 0 0 0 17.32 5z"
+          />
+        </symbol>
+        <symbol id="i-flag" viewBox="0 0 24 24">
+          <path d="M4 22V4a1 1 0 0 1 .4-.8A6 6 0 0 1 8 2c3 0 5 2 7.33 2q2 0 3.07-.8A1 1 0 0 1 20 4v10a1 1 0 0 1-.4.8A6 6 0 0 1 16 16c-3 0-5-2-8-2a6 6 0 0 0-4 1.53" />
+        </symbol>
+        <symbol id="i-star" viewBox="0 0 48 48">
+          <path
+            d="M24 3 29.6 16.3 44 17.5 33 26.9 36.3 41 24 33.5 11.7 41 15 26.9 4 17.5 18.4 16.3Z"
+            stroke="#13283A"
+            stroke-width="3"
+            stroke-linejoin="round"
+          />
+        </symbol>
+        <symbol id="g-logo" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z" />
+          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96H1.29v3.09C3.26 21.3 7.31 24 12 24z" />
+          <path fill="#FBBC05" d="M5.27 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.98-3.09z" />
+          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z" />
+        </symbol>
+
+        <symbol id="star-st" viewBox="0 0 52 52">
+          <path
+            d="M24 3 29.6 16.3 44 17.5 33 26.9 36.3 41 24 33.5 11.7 41 15 26.9 4 17.5 18.4 16.3Z"
+            transform="translate(4.5 5.5)"
+            fill="#13283A"
+            stroke="#13283A"
+            stroke-width="3"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M24 3 29.6 16.3 44 17.5 33 26.9 36.3 41 24 33.5 11.7 41 15 26.9 4 17.5 18.4 16.3Z"
+            transform="translate(1.5 1.5)"
+            fill="#FFC233"
+            stroke="#13283A"
+            stroke-width="3"
+            stroke-linejoin="round"
+          />
+        </symbol>
+        <symbol id="rex" viewBox="0 0 64 64">
+          <path d="M15 44Q4 47 2 38Q11 40 19 36Z" fill="#2ED3A0" stroke="#13283A" stroke-width="2.5" stroke-linejoin="round" />
+          <path d="M18 34 21 26 26 31ZM25 29 29 21 33 27Z" fill="#FF6FA5" stroke="#13283A" stroke-width="2.2" stroke-linejoin="round" />
+          <ellipse cx="26" cy="42" rx="13" ry="12" fill="#2ED3A0" stroke="#13283A" stroke-width="2.5" />
+          <ellipse cx="28" cy="45" rx="7" ry="6.5" fill="#CDF5E8" />
+          <rect x="17" y="50" width="7" height="9" rx="3" fill="#2ED3A0" stroke="#13283A" stroke-width="2.5" />
+          <rect x="29" y="50" width="7" height="9" rx="3" fill="#2ED3A0" stroke="#13283A" stroke-width="2.5" />
+          <ellipse cx="41" cy="25" rx="13" ry="11" fill="#2ED3A0" stroke="#13283A" stroke-width="2.5" />
+          <circle cx="45" cy="22" r="3" fill="#13283A" />
+          <circle cx="46" cy="21" r="1" fill="#FFFFFF" />
+          <ellipse cx="36" cy="29" rx="2.4" ry="1.5" fill="#FFB3C7" />
+          <path d="M43 30Q48 32 52 28" fill="none" stroke="#13283A" stroke-width="2" stroke-linecap="round" />
+          <circle cx="41" cy="25" r="17" fill="#FFFFFF" fill-opacity="0.16" stroke="#FFFFFF" stroke-width="2.5" />
+          <path d="M31 15Q35 11 40 11" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" />
+        </symbol>
+        <symbol id="egg" viewBox="0 0 40 48">
+          <path d="M20 3C31 3 37 20 37 30C37 40 29 45 20 45C11 45 3 40 3 30C3 20 9 3 20 3Z" fill="#FFF0C2" stroke="#13283A" stroke-width="2.5" />
+          <path
+            d="M20 17 22.6 22.4 28.5 23.2 24.2 27.3 25.2 33.2 20 30.4 14.8 33.2 15.8 27.3 11.5 23.2 17.4 22.4Z"
+            fill="#FFC233"
+            stroke="#13283A"
+            stroke-width="1.8"
+            stroke-linejoin="round"
+          />
+        </symbol>
+        <symbol id="rocket" viewBox="0 0 40 64">
+          <path d="M15 47Q20 62 25 47Z" fill="#FFC233" stroke="#13283A" stroke-width="2.2" stroke-linejoin="round" />
+          <path d="M12 36 4 49 12 46ZM28 36 36 49 28 46Z" fill="#FF6FA5" stroke="#13283A" stroke-width="2.5" stroke-linejoin="round" />
+          <path d="M20 4C30 14 31 32 28 47H12C9 32 10 14 20 4Z" fill="#FFFFFF" stroke="#13283A" stroke-width="2.5" stroke-linejoin="round" />
+          <circle cx="20" cy="24" r="5" fill="#4CC9F0" stroke="#13283A" stroke-width="2.5" />
+        </symbol>
+        <symbol id="comet" viewBox="0 0 64 64">
+          <path d="M34 14 60 2 52 16 63 22 46 27Z" fill="#FFC233" stroke="#13283A" stroke-width="2.5" stroke-linejoin="round" />
+          <circle cx="28" cy="37" r="20" fill="#FF8A3D" stroke="#13283A" stroke-width="2.5" />
+          <circle cx="21" cy="36" r="3.4" fill="#13283A" />
+          <circle cx="35" cy="36" r="3.4" fill="#13283A" />
+          <path d="M15 28 24 31M41 28 32 31" stroke="#13283A" stroke-width="2.5" stroke-linecap="round" />
+          <path d="M22 46Q28 42 34 46" fill="none" stroke="#13283A" stroke-width="2.5" stroke-linecap="round" />
+        </symbol>
+        <symbol id="planet" viewBox="0 0 64 42">
+          <circle cx="32" cy="21" r="14" fill="#FF6FA5" stroke="#13283A" stroke-width="2.5" />
+          <ellipse cx="32" cy="23" rx="28" ry="7" fill="none" stroke="#13283A" stroke-width="7" />
+          <ellipse cx="32" cy="23" rx="28" ry="7" fill="none" stroke="#FFC233" stroke-width="3" />
+        </symbol>
+        <symbol id="scene" viewBox="0 0 342 150">
+          <circle cx="160" cy="14" r="2" fill="#FFFFFF" />
+          <circle cx="230" cy="40" r="1.6" fill="#FFFFFF" />
+          <circle cx="110" cy="120" r="1.6" fill="#FFFFFF" />
+          <circle cx="320" cy="70" r="2" fill="#FFFFFF" />
+          <circle cx="20" cy="18" r="1.6" fill="#FFFFFF" />
+          <use href="#rex" x="10" y="32" width="108" height="108" />
+          <use href="#rocket" x="122" y="18" width="46" height="74" />
+          <use href="#egg" x="182" y="16" width="32" height="38" />
+          <use href="#egg" x="226" y="58" width="32" height="38" />
+          <use href="#egg" x="178" y="98" width="32" height="38" />
+          <use href="#egg" x="290" y="96" width="30" height="36" />
+          <use href="#planet" x="262" y="6" width="72" height="48" />
+        </symbol>
+
+        <pattern id="chalk" width="150" height="150" patternUnits="userSpaceOnUse">
+          <g fill="none" stroke="#FFFFFF" stroke-opacity="0.13" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 18 28 30M28 18 16 30" />
+            <path d="M104 12V30M95 21H113" />
+            <path d="M66 62Q68 71 76 73Q68 75 66 84Q64 75 56 73Q64 71 66 62Z" />
+            <path d="M118 104H136M118 113H136" />
+            <circle cx="26" cy="112" r="7" />
+            <path d="M74 128Q80 120 86 128T98 128" />
+          </g>
+        </pattern>
+        <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
+          <path d="M28 0H0V28" fill="none" stroke="#FFFFFF" stroke-opacity="0.12" stroke-width="1.5" />
+        </pattern>
+        <clipPath id="reveal-clip">
+          <rect class="reveal" width="342" height="150" />
+        </clipPath>
+      </defs>
+    </svg>
+
+    <main class="board">
+      <h2 class="group">Start <small>Splash, parent login, profile pick</small></h2>
+
+      <section class="slot">
+        <span class="lbl"><b>A-01</b>Splash</span>
+        <div class="device" data-shot="a01-splash">
+          <div class="screen kid">
+            <svg class="chalk" aria-hidden="true"><rect width="100%" height="100%" fill="url(#chalk)" /></svg>
+            <div class="island"></div>
+            <div class="sb">
+              <span>9:41</span>
+              <span class="ic">
+                <svg><use href="#sb-signal" /></svg>
+                <svg><use href="#sb-wifi" /></svg>
+                <svg class="batt"><use href="#sb-batt" /></svg>
+              </span>
+            </div>
+            <div class="main center">
+              <div class="ag s240 bob">
+                <img src="../assets/agents/robo-idle.svg" alt="Robo, the EduBotGames PadBot" />
+              </div>
+              <h1 class="wordmark">EduBot<span>Games</span></h1>
+              <p class="p-kid">Learn it your way!</p>
+              <div class="load" role="progressbar" aria-label="Loading"><i></i></div>
+            </div>
+            <div class="foot center">
+              <span class="pill">AI that teaches, not cheats.</span>
+            </div>
+            <div class="home"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slot">
+        <span class="lbl"><b>A-02</b>Parent login</span>
+        <div class="device" data-shot="a02-login">
+          <div class="screen parent">
+            <div class="island"></div>
+            <div class="sb">
+              <span>9:41</span>
+              <span class="ic">
+                <svg><use href="#sb-signal" /></svg>
+                <svg><use href="#sb-wifi" /></svg>
+                <svg class="batt"><use href="#sb-batt" /></svg>
+              </span>
+            </div>
+            <div class="main mid tight">
+              <div class="lockup">
+                <img src="../assets/brand/padbot-mark.svg" alt="" />
+                <span class="wordmark on-light">EduBot<span>Games</span></span>
+              </div>
+              <div>
+                <h1 class="h-par">Log in</h1>
+                <p class="p-par">Parents pick the topic. Kids pick the game.</p>
+              </div>
+              <div class="fld">
+                <label>Email</label>
+                <div class="in" id="a02-email" role="textbox" aria-label="Email">
+                  <svg class="i"><use href="#i-mail" /></svg>
+                  <span class="grow">anna@example.com</span>
+                </div>
+              </div>
+              <div class="fld">
+                <label>Password</label>
+                <div class="in focus" id="a02-pass" role="textbox" aria-label="Password">
+                  <svg class="i"><use href="#i-lock" /></svg>
+                  <span class="grow">••••••••••<i class="caret"></i></span>
+                  <button class="act" type="button" aria-label="Show password">
+                    <svg class="i"><use href="#i-eye" /></svg>
+                  </button>
+                </div>
+              </div>
+              <a class="link" href="#a02-pass">Forgot password?</a>
+              <button class="cta teal" type="button">Log in</button>
+              <p class="divider">or</p>
+              <button class="cta white sm" type="button">
+                <svg class="g"><use href="#g-logo" /></svg>
+                Continue with Google
+              </button>
+            </div>
+            <div class="foot">
+              <a class="kidlink" href="#k07">
+                <img class="s44" src="../assets/agents/robo-head.svg" alt="" />
+                <span>Kid? Join with a code</span>
+                <svg class="i"><use href="#i-arrow" /></svg>
+              </a>
+              <p class="small-c">New here? <a class="link" href="#a02">Create an account</a></p>
+            </div>
+            <div class="home"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slot">
+        <span class="lbl"><b>A-03</b>Who is playing?</span>
+        <div class="device" data-shot="a03-who-is-playing">
+          <div class="screen kid">
+            <svg class="chalk" aria-hidden="true"><rect width="100%" height="100%" fill="url(#chalk)" /></svg>
+            <div class="island"></div>
+            <div class="sb">
+              <span>9:41</span>
+              <span class="ic">
+                <svg><use href="#sb-signal" /></svg>
+                <svg><use href="#sb-wifi" /></svg>
+                <svg class="batt"><use href="#sb-batt" /></svg>
+              </span>
+            </div>
+            <div class="main mid">
+              <div class="hero">
+                <div class="ag s150 bob">
+                  <img src="../assets/agents/robo-idle.svg" alt="Robo" />
+                </div>
+                <h1 class="h-kid">Who is playing?</h1>
+              </div>
+              <div class="tiles">
+                <button class="tile" type="button">
+                  <span class="kav xl maja">M</span>
+                  <b>Maja</b>
+                  <span class="age">8 years</span>
+                  <span class="tag">Multiplication</span>
+                </button>
+                <button class="tile" type="button">
+                  <span class="kav xl leo">L</span>
+                  <b>Leo</b>
+                  <span class="age">9 years</span>
+                  <span class="tag free">Free play</span>
+                </button>
+              </div>
+            </div>
+            <div class="foot center">
+              <button class="cta white sm" type="button">
+                <svg class="i"><use href="#i-lock" /></svg>
+                Parent area
+              </button>
+              <p class="small-c on-kid">Grown-ups only. Asks for your password.</p>
+            </div>
+            <div class="home"></div>
+          </div>
+        </div>
+      </section>
+
+      <h2 class="group">Parent <small>Anna sets the goal, Prof plans, Lens reports</small></h2>
+
+      <section class="slot">
+        <span class="lbl"><b>P-01</b>Parent home</span>
+        <div class="device" data-shot="p01-parent-home">
+          <div class="screen parent">
+            <div class="island"></div>
+            <div class="sb">
+              <span>9:41</span>
+              <span class="ic">
+                <svg><use href="#sb-signal" /></svg>
+                <svg><use href="#sb-wifi" /></svg>
+                <svg class="batt"><use href="#sb-batt" /></svg>
+              </span>
+            </div>
+            <header class="bar">
+              <img class="s52" src="../assets/brand/padbot-mark.svg" alt="EduBotGames" />
+              <div class="who">
+                <b>Hi Anna</b>
+                <span>Thursday, 5 November</span>
+              </div>
+              <button class="round" type="button" aria-label="Hand over to kids">
+                <svg class="i"><use href="#i-pad" /></svg>
+              </button>
+            </header>
+            <div class="main">
+              <article class="panel">
+                <div class="hd">
+                  <div class="tx">
+                    <b>Last result</b>
+                    <span class="meta">Maja · Multiplication up to 50 · today</span>
+                  </div>
+                </div>
+                <div class="delta">
+                  <span class="was">40%</span>
+                  <svg class="i"><use href="#i-arrow" /></svg>
+                  <span class="now">75%</span>
+                  <span class="up"><svg class="i"><use href="#i-up" /></svg>+35</span>
+                </div>
+                <div class="talk">
+                  <div class="ag s60 bob">
+                    <img src="../assets/agents/lens-idle.svg" alt="Lens" />
+                  </div>
+                  <p class="say l lens par">Maja went from 40% to 75%. Practise 7× and 8× next.</p>
+                </div>
+                <a class="link" href="#p04">See Lens's report <svg class="i"><use href="#i-chev" /></svg></a>
+              </article>
+              <h2 class="h-sec">Your kids</h2>
+              <div class="panel flush">
+                <div class="krow">
+                  <span class="kav lg maja">M</span>
+                  <div class="kt">
+                    <b>Maja, 8</b>
+                    <span>Multiplication up to 50</span>
+                    <span>Played today with Leo</span>
+                  </div>
+                  <span class="up">75%</span>
+                </div>
+                <div class="krow">
+                  <span class="kav lg leo">L</span>
+                  <div class="kt">
+                    <b>Leo, 9</b>
+                    <span>No goal yet</span>
+                  </div>
+                  <button class="mini" type="button">
+                    <svg class="i"><use href="#i-plus" /></svg>
+                    Goal
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="foot">
+              <button class="cta teal" type="button">
+                <svg class="i"><use href="#i-plus" /></svg>
+                Start new goal
+              </button>
+            </div>
+            <div class="home"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slot">
+        <span class="lbl"><b>P-02</b>New goal</span>
+        <div class="device" data-shot="p02-new-goal">
+          <div class="screen parent">
+            <div class="island"></div>
+            <div class="sb">
+              <span>9:41</span>
+              <span class="ic">
+                <svg><use href="#sb-signal" /></svg>
+                <svg><use href="#sb-wifi" /></svg>
+                <svg class="batt"><use href="#sb-batt" /></svg>
+              </span>
+            </div>
+            <header class="bar">
+              <button class="round" type="button" aria-label="Back">
+                <svg class="i"><use href="#i-back" /></svg>
+              </button>
+              <h1>New goal</h1>
+            </header>
+            <div class="main tight scrolls" data-allow-clip>
+              <div class="seg" role="radiogroup" aria-label="Kid">
+                <span class="on" role="radio" aria-checked="true"><i class="kav sm maja">M</i>Maja</span>
+                <span role="radio" aria-checked="false"><i class="kav sm leo">L</i>Leo</span>
+              </div>
+              <div class="talk">
+                <div class="ag s72 bob">
+                  <img src="../assets/agents/prof-idle.svg" alt="Prof" />
+                </div>
+                <p class="say l prof par">Type a goal. I turn it into tasks, easy to hard.</p>
+              </div>
+              <div class="fld">
+                <label>Learning goal</label>
+                <div class="in focus" id="p02-goal" role="textbox" aria-label="Learning goal">
+                  <span class="grow">Multiplication up to 50<i class="caret"></i></span>
+                </div>
+              </div>
+              <div class="chipset" aria-label="Suggestions">
+                <span class="on">Multiplication</span>
+                <span>Spelling</span>
+                <span>English words</span>
+                <span>Clocks</span>
+              </div>
+              <div class="fld">
+                <span class="rowlbl">Age <span class="val">8</span></span>
+                <div class="slider" role="slider" aria-label="Age" aria-valuemin="6" aria-valuemax="12" aria-valuenow="8">
+                  <span class="track"></span>
+                  <span class="fill"></span>
+                  <span class="thumb"></span>
+                </div>
+                <div class="ticks">
+                  <span>6</span>
+                  <span>7</span>
+                  <span class="on">8</span>
+                  <span>9</span>
+                  <span>10</span>
+                  <span>11</span>
+                  <span>12</span>
+                </div>
+              </div>
+              <div class="fld">
+                <span class="rowlbl">Number of questions</span>
+                <div class="seg" role="radiogroup" aria-label="Number of questions">
+                  <span role="radio" aria-checked="false">5</span>
+                  <span class="on" role="radio" aria-checked="true">10</span>
+                </div>
+              </div>
+            </div>
+            <div class="foot">
+              <button class="cta teal" type="button">
+                <svg class="i"><use href="#i-spark" /></svg>
+                Create game
+              </button>
+              <p class="small-c">Prof makes the tasks. Maja picks the game.</p>
+            </div>
+            <div class="home"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slot">
+        <span class="lbl"><b>P-03</b>Prof preview</span>
+        <div class="device" data-shot="p03-prof-preview">
+          <div class="screen parent">
+            <div class="island"></div>
+            <div class="sb">
+              <span>9:41</span>
+              <span class="ic">
+                <svg><use href="#sb-signal" /></svg>
+                <svg><use href="#sb-wifi" /></svg>
+                <svg class="batt"><use href="#sb-batt" /></svg>
+              </span>
+            </div>
+            <header class="bar">
+              <button class="round" type="button" aria-label="Back">
+                <svg class="i"><use href="#i-back" /></svg>
+              </button>
+              <h1>Tasks for Maja</h1>
+            </header>
+            <div class="main tight">
+              <div class="talk">
+                <div class="ag s72 done">
+                  <img src="../assets/agents/prof-done.svg" alt="Prof, done" />
+                </div>
+                <p class="say l prof par">Multiplication to 50 for age 8. I made 10 tasks, easy to hard.</p>
+              </div>
+              <div class="scrollcut" data-allow-clip>
+                <div class="panel flush tasks">
+                  <p class="lvl"><i class="on"></i><i></i><i></i>Easy</p>
+                  <div class="trow">
+                    <span class="n">1</span>
+                    <div><b>2 × 3 = ?</b><small>2× table</small></div>
+                    <span class="ans">6</span>
+                    <button class="edit" type="button" aria-label="Edit task 1"><svg class="i"><use href="#i-pencil" /></svg></button>
+                  </div>
+                  <div class="trow">
+                    <span class="n">2</span>
+                    <div><b>5 × 4 = ?</b><small>5× table</small></div>
+                    <span class="ans">20</span>
+                    <button class="edit" type="button" aria-label="Edit task 2"><svg class="i"><use href="#i-pencil" /></svg></button>
+                  </div>
+                  <div class="trow">
+                    <span class="n">3</span>
+                    <div><b>10 × 3 = ?</b><small>10× table</small></div>
+                    <span class="ans">30</span>
+                    <button class="edit" type="button" aria-label="Edit task 3"><svg class="i"><use href="#i-pencil" /></svg></button>
+                  </div>
+                  <p class="lvl"><i class="on"></i><i class="on"></i><i></i>Medium</p>
+                  <div class="trow">
+                    <span class="n">4</span>
+                    <div><b>4 × 6 = ?</b><small>4× table</small></div>
+                    <span class="ans">24</span>
+                    <button class="edit" type="button" aria-label="Edit task 4"><svg class="i"><use href="#i-pencil" /></svg></button>
+                  </div>
+                  <div class="trow">
+                    <span class="n">5</span>
+                    <div><b>3 × 9 = ?</b><small>3× table</small></div>
+                    <span class="ans">27</span>
+                    <button class="edit" type="button" aria-label="Edit task 5"><svg class="i"><use href="#i-pencil" /></svg></button>
+                  </div>
+                  <div class="trow">
+                    <span class="n">6</span>
+                    <div><b>6 × 7 = ?</b><small>7× table</small></div>
+                    <span class="ans">42</span>
+                    <button class="edit" type="button" aria-label="Edit task 6"><svg class="i"><use href="#i-pencil" /></svg></button>
+                  </div>
+                  <div class="trow">
+                    <span class="n">7</span>
+                    <div><b>8 × 5 = ?</b><small>8× table</small></div>
+                    <span class="ans">40</span>
+                    <button class="edit" type="button" aria-label="Edit task 7"><svg class="i"><use href="#i-pencil" /></svg></button>
+                  </div>
+                  <p class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i>Hard</p>
+                  <div class="trow">
+                    <span class="n">8</span>
+                    <div><b>7 × 7 = ?</b><small>7× table</small></div>
+                    <span class="ans">49</span>
+                    <button class="edit" type="button" aria-label="Edit task 8"><svg class="i"><use href="#i-pencil" /></svg></button>
+                  </div>
+                  <div class="trow">
+                    <span class="n">9</span>
+                    <div><b>8 × 6 = ?</b><small>8× table</small></div>
+                    <span class="ans">48</span>
+                    <button class="edit" type="button" aria-label="Edit task 9"><svg class="i"><use href="#i-pencil" /></svg></button>
+                  </div>
+                  <div class="trow">
+                    <span class="n">10</span>
+                    <div><b>4 bags, 8 apples each. How many?</b><small>Word task, 8× table</small></div>
+                    <span class="ans">32</span>
+                    <button class="edit" type="button" aria-label="Edit task 10"><svg class="i"><use href="#i-pencil" /></svg></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="foot row">
+              <button class="cta white sm half" type="button">
+                <svg class="i"><use href="#i-pencil" /></svg>
+                Edit
+              </button>
+              <button class="cta teal sm grow" type="button">
+                <svg class="i"><use href="#i-send" /></svg>
+                Send to Maja
+              </button>
+            </div>
+            <div class="home"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slot">
+        <span class="lbl"><b>P-04</b>Report by Lens</span>
+        <div class="device" data-shot="p04-lens-report">
+          <div class="screen parent">
+            <div class="island"></div>
+            <div class="sb">
+              <span>9:41</span>
+              <span class="ic">
+                <svg><use href="#sb-signal" /></svg>
+                <svg><use href="#sb-wifi" /></svg>
+                <svg class="batt"><use href="#sb-batt" /></svg>
+              </span>
+            </div>
+            <header class="bar">
+              <button class="round" type="button" aria-label="Back">
+                <svg class="i"><use href="#i-back" /></svg>
+              </button>
+              <h1>Maja's report</h1>
+              <button class="round" type="button" aria-label="Share report">
+                <svg class="i"><use href="#i-share" /></svg>
+              </button>
+            </header>
+            <div class="main tight scrolls" data-allow-clip>
+              <article class="panel">
+                <span class="meta">Multiplication up to 50 · 9 of 10 solved · 3 hints</span>
+                <div class="delta">
+                  <span class="was">40%</span>
+                  <svg class="i"><use href="#i-arrow" /></svg>
+                  <span class="now">75%</span>
+                  <span class="up"><svg class="i"><use href="#i-up" /></svg>+35</span>
+                </div>
+                <div class="talk">
+                  <div class="ag s52 done">
+                    <img src="../assets/agents/lens-head.svg" alt="Lens" />
+                    <span class="ok"><svg class="i"><use href="#i-check" /></svg></span>
+                  </div>
+                  <p class="p-par">Maja went from 40% to 75%. Practise 7× and 8× next.</p>
+                </div>
+              </article>
+              <article class="panel">
+                <div class="rowlbl">
+                  By skill
+                  <span class="legend">
+                    <span><i></i>Before</span>
+                    <span><i class="now"></i>Now</span>
+                  </span>
+                </div>
+                <div class="sk">
+                  <span>2× 5× 10×</span>
+                  <div class="bars"><i class="w70"></i><i class="now w95"></i></div>
+                  <b>95%</b>
+                </div>
+                <div class="sk">
+                  <span>3× 4×</span>
+                  <div class="bars"><i class="w50"></i><i class="now w85"></i></div>
+                  <b>85%</b>
+                </div>
+                <div class="sk">
+                  <span>8×</span>
+                  <div class="bars"><i class="w20"></i><i class="now w60"></i></div>
+                  <b>60%</b>
+                </div>
+                <div class="sk">
+                  <span>7×</span>
+                  <div class="bars"><i class="w20"></i><i class="now w55"></i></div>
+                  <b>55%</b>
+                </div>
+                <div class="weak">
+                  <b>Weak:</b>
+                  <span>7× table</span>
+                  <span>8× table</span>
+                </div>
+              </article>
+              <article class="panel">
+                <div class="pass">
+                  <b class="h-sec">Next step</b>
+                  <div class="ag s44 c-lens">
+                    <img src="../assets/agents/lens-head.svg" alt="Lens" />
+                  </div>
+                  <div class="lane">
+                    <span class="fly p04" data-allow-overlap></span>
+                  </div>
+                  <div class="ag s44 c-prof">
+                    <img src="../assets/agents/prof-head.svg" alt="Prof" />
+                  </div>
+                </div>
+                <p class="p-par">Prof will make 10 new tasks on 7× and 8×, in the same dinosaur game.</p>
+              </article>
+            </div>
+            <div class="foot">
+              <button class="cta teal" type="button">
+                <svg class="i"><use href="#i-refresh" /></svg>
+                Play again
+              </button>
+            </div>
+            <div class="home"></div>
+          </div>
+        </div>
+      </section>
+
+      <h2 class="group">Kid <small>Maja talks to Robo's team: Spark, Doodle and Robo in the game</small></h2>
+
+      <section class="slot">
+        <span class="lbl"><b>K-01</b>Kid home</span>
+        <div class="device" data-shot="k01-kid-home">
+          <div class="screen kid">
+            <svg class="chalk" aria-hidden="true"><rect width="100%" height="100%" fill="url(#chalk)" /></svg>
+            <div class="island"></div>
+            <div class="sb">
+              <span>9:41</span>
+              <span class="ic">
+                <svg><use href="#sb-signal" /></svg>
+                <svg><use href="#sb-wifi" /></svg>
+                <svg class="batt"><use href="#sb-batt" /></svg>
+              </span>
+            </div>
+            <header class="bar">
+              <span class="pill sun has-head wrap">
+                <img src="../assets/agents/prof-head.svg" alt="" />
+                Today: Multiplication
+              </span>
+              <span class="spacer"></span>
+              <button class="round lg" type="button" aria-label="Join a friend">
+                <svg class="i"><use href="#i-users" /></svg>
+              </button>
+            </header>
+            <div class="main center">
+              <div class="hero">
+                <div class="ag s176 bob">
+                  <img src="../assets/agents/robo-idle.svg" alt="Robo" />
+                </div>
+                <h1 class="h-kid">Hi Maja!</h1>
+                <p class="p-kid">What do you want to play?</p>
+              </div>
+              <button class="mic" type="button" aria-label="Hold to talk">
+                <svg class="i"><use href="#i-mic" /></svg>
+              </button>
+              <p class="ideas">
+                <img class="s36" src="../assets/agents/spark-head.svg" alt="" />
+                Hold and tell Spark your idea
+              </p>
+              <div class="in kid" role="textbox" aria-label="Type your idea">
+                <svg class="i"><use href="#i-keyboard" /></svg>
+                <span class="grow ph">or type it here</span>
+                <button class="act" type="button" aria-label="Send idea">
+                  <svg class="i"><use href="#i-arrow" /></svg>
+                </button>
+              </div>
+            </div>
+            <div class="foot"></div>
+            <div class="home"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slot">
+        <span class="lbl"><b>K-02</b>Listening</span>
+        <div class="device" data-shot="k02-listening">
+          <div class="screen kid">
+            <svg class="chalk" aria-hidden="true"><rect width="100%" height="100%" fill="url(#chalk)" /></svg>
+            <div class="island"></div>
+            <div class="sb">
+              <span>9:41</span>
+              <span class="ic">
+                <svg><use href="#sb-signal" /></svg>
+                <svg><use href="#sb-wifi" /></svg>
+                <svg class="batt"><use href="#sb-batt" /></svg>
+              </span>
+            </div>
+            <header class="bar">
+              <button class="round lg" type="button" aria-label="Stop">
+                <svg class="i"><use href="#i-x" /></svg>
+              </button>
+              <span class="spacer"></span>
+              <span class="pill has-head">
+                <span class="kav sm maja">M</span>
+                Maja
+              </span>
+            </header>
+            <div class="main center">
+              <div class="ag s150 work c-spark">
+                <img src="../assets/agents/spark-working.svg" alt="Spark, listening" />
+              </div>
+              <h1 class="h-kid md">Spark is listening!</h1>
+              <div class="transcript">
+                <span>You said</span>
+                <b>dinosaurs in space<i class="caret"></i></b>
+              </div>
+              <div class="wave" aria-hidden="true">
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+              </div>
+              <button class="mic live" type="button" aria-label="Recording, let go to finish">
+                <svg class="i"><use href="#i-mic" /></svg>
+              </button>
+              <p class="p-kid">Let go when you are done</p>
+            </div>
+            <div class="foot"></div>
+            <div class="home"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slot">
+        <span class="lbl"><b>K-03</b>Spark suggests games</span>
+        <div class="device" data-shot="k03-pick-a-game">
+          <div class="screen kid">
+            <svg class="chalk" aria-hidden="true"><rect width="100%" height="100%" fill="url(#chalk)" /></svg>
+            <div class="island"></div>
+            <div class="sb">
+              <span>9:41</span>
+              <span class="ic">
+                <svg><use href="#sb-signal" /></svg>
+                <svg><use href="#sb-wifi" /></svg>
+                <svg class="batt"><use href="#sb-batt" /></svg>
+              </span>
+            </div>
+            <header class="bar">
+              <button class="round lg" type="button" aria-label="Back">
+                <svg class="i"><use href="#i-back" /></svg>
+              </button>
+              <span class="spacer"></span>
+              <button class="pill" type="button">
+                dinosaurs in space
+                <svg class="i"><use href="#i-pencil" /></svg>
+              </button>
+            </header>
+            <div class="main scrolls" data-allow-clip>
+              <div class="lead">
+                <div class="ag s104 bob">
+                  <img src="../assets/agents/spark-handoff.svg" alt="Spark" />
+                </div>
+                <p class="say l spark">Dinosaurs in space! Catch star eggs, dodge comets or beat the space boss?</p>
+              </div>
+              <button class="gcard on" type="button" aria-pressed="true">
+                <span class="pv">
+                  <svg viewBox="0 0 96 96" aria-hidden="true">
+                    <circle cx="14" cy="12" r="1.6" fill="#FFFFFF" />
+                    <circle cx="48" cy="22" r="1.4" fill="#FFFFFF" />
+                    <circle cx="88" cy="30" r="1.6" fill="#FFFFFF" />
+                    <circle cx="40" cy="88" r="1.4" fill="#FFFFFF" />
+                    <circle cx="79" cy="53" r="15" fill="none" stroke="#FFC233" stroke-width="3" stroke-dasharray="4 4" />
+                    <use href="#egg" x="56" y="6" width="22" height="26" />
+                    <use href="#egg" x="68" y="40" width="22" height="26" />
+                    <use href="#egg" x="62" y="70" width="20" height="24" />
+                    <use href="#rex" x="0" y="30" width="60" height="60" />
+                  </svg>
+                </span>
+                <span>
+                  <span class="gt">Collect</span>
+                  <span class="gp">Fly Rex around and catch the star egg with the right answer.</span>
+                </span>
+                <span class="pick"><svg class="i"><use href="#i-check" /></svg></span>
+              </button>
+              <button class="gcard" type="button" aria-pressed="false">
+                <span class="pv">
+                  <svg viewBox="0 0 96 96" aria-hidden="true">
+                    <circle cx="16" cy="10" r="1.6" fill="#FFFFFF" />
+                    <circle cx="46" cy="18" r="1.4" fill="#FFFFFF" />
+                    <circle cx="68" cy="22" r="6" fill="#FF8A3D" stroke="#13283A" stroke-width="2.2" />
+                    <path d="M73 18 88 9 83 20Z" fill="#FFC233" stroke="#13283A" stroke-width="2" stroke-linejoin="round" />
+                    <path d="M0 78Q48 68 96 78V96H0Z" fill="#C9CED6" stroke="#13283A" stroke-width="2.5" />
+                    <ellipse cx="22" cy="86" rx="6" ry="2.5" fill="#9AA3AF" />
+                    <ellipse cx="70" cy="88" rx="5" ry="2" fill="#9AA3AF" />
+                    <path d="M56 76V58a9 9 0 0 1 18 0V76" fill="none" stroke="#13283A" stroke-width="7" />
+                    <path d="M56 76V58a9 9 0 0 1 18 0V76" fill="none" stroke="#FFC233" stroke-width="3" />
+                    <path d="M80 76V62a8 8 0 0 1 16 0V76" fill="none" stroke="#13283A" stroke-width="7" />
+                    <path d="M80 76V62a8 8 0 0 1 16 0V76" fill="none" stroke="#FF6FA5" stroke-width="3" />
+                    <use href="#rex" x="4" y="22" width="48" height="48" />
+                  </svg>
+                </span>
+                <span>
+                  <span class="gt">Runner</span>
+                  <span class="gp">Run on the moon, dodge comets and jump through the right gate.</span>
+                </span>
+              </button>
+              <button class="gcard" type="button" aria-pressed="false">
+                <span class="pv">
+                  <svg viewBox="0 0 96 96" aria-hidden="true">
+                    <circle cx="10" cy="14" r="1.6" fill="#FFFFFF" />
+                    <circle cx="30" cy="40" r="1.4" fill="#FFFFFF" />
+                    <use href="#comet" x="36" y="0" width="60" height="60" />
+                    <use href="#rex" x="0" y="20" width="40" height="40" />
+                    <rect x="8" y="66" width="36" height="22" rx="7" fill="#FFFFFF" stroke="#13283A" stroke-width="2.5" />
+                    <rect x="52" y="66" width="36" height="22" rx="7" fill="#FFC233" stroke="#13283A" stroke-width="2.5" />
+                    <text x="26" y="82" text-anchor="middle" font-size="14" fill="#13283A">42</text>
+                    <text x="70" y="82" text-anchor="middle" font-size="14" fill="#13283A">48</text>
+                  </svg>
+                </span>
+                <span>
+                  <span class="gt">Quiz battle</span>
+                  <span class="gp">Team up with Leo and Robo to beat the space boss.</span>
+                </span>
+              </button>
+            </div>
+            <div class="foot">
+              <button class="cta" type="button">
+                <svg class="i"><use href="#i-spark" /></svg>
+                Build my game!
+              </button>
+            </div>
+            <div class="home"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slot">
+        <span class="lbl"><b>K-04</b>Building</span>
+        <div class="device" data-shot="k04-building">
+          <div class="screen kid">
+            <svg class="chalk" aria-hidden="true"><rect width="100%" height="100%" fill="url(#chalk)" /></svg>
+            <div class="island"></div>
+            <div class="sb">
+              <span>9:41</span>
+              <span class="ic">
+                <svg><use href="#sb-signal" /></svg>
+                <svg><use href="#sb-wifi" /></svg>
+                <svg class="batt"><use href="#sb-batt" /></svg>
+              </span>
+            </div>
+            <div class="main roomy">
+              <div class="lead">
+                <div class="ag s120 work c-robo">
+                  <img src="../assets/agents/robo-working.svg" alt="Robo, leading the team" />
+                </div>
+                <p class="say l robo">My team is building your game!</p>
+              </div>
+              <div class="tl" role="list">
+                <div class="step" role="listitem">
+                  <div class="ag s52 done">
+                    <img src="../assets/agents/prof-head.svg" alt="Prof" />
+                    <span class="ok"><svg class="i"><use href="#i-check" /></svg></span>
+                  </div>
+                  <div class="tx">
+                    <span class="nm">Prof <span class="st">Done</span></span>
+                    <span class="ln">10 tasks, easy to hard</span>
+                  </div>
+                </div>
+                <div class="step" role="listitem">
+                  <div class="ag s52 done">
+                    <img src="../assets/agents/spark-head.svg" alt="Spark" />
+                    <span class="ok"><svg class="i"><use href="#i-check" /></svg></span>
+                  </div>
+                  <div class="tx">
+                    <span class="nm">Spark <span class="st">Done</span></span>
+                    <span class="ln">Collect game with Rex</span>
+                  </div>
+                </div>
+                <div class="step" role="listitem">
+                  <div class="ag s52 work c-doodle">
+                    <img src="../assets/agents/doodle-head.svg" alt="Doodle" />
+                  </div>
+                  <div class="tx">
+                    <span class="nm">Doodle <span class="st now">Painting</span></span>
+                    <span class="ln">Rex, his rocket and four shiny star eggs...</span>
+                  </div>
+                </div>
+                <div class="step later" role="listitem">
+                  <span class="goal-ic"><svg class="i"><use href="#i-flag" /></svg></span>
+                  <div class="tx">
+                    <span class="nm">Ready to play</span>
+                    <span class="ln">Robo joins you in the game</span>
+                  </div>
+                </div>
+                <span class="fly k04" data-allow-overlap></span>
+              </div>
+              <div class="paint" aria-label="Doodle is painting the game world">
+                <svg viewBox="0 0 342 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                  <use href="#scene" class="ghost" />
+                  <g clip-path="url(#reveal-clip)">
+                    <use href="#scene" />
+                  </g>
+                  <g class="brush">
+                    <g transform="rotate(-30 0 80)">
+                      <rect x="-4" y="22" width="8" height="40" rx="3" fill="#FF6FA5" stroke="#13283A" stroke-width="2.5" />
+                      <rect x="-5.5" y="58" width="11" height="9" rx="2" fill="#C9CED6" stroke="#13283A" stroke-width="2.5" />
+                      <path d="M-5.5 67Q0 86 5.5 67Z" fill="#2ED3A0" stroke="#13283A" stroke-width="2.5" stroke-linejoin="round" />
+                    </g>
+                  </g>
+                </svg>
+              </div>
+              <div class="prog">
+                <span class="trk"><i></i></span>
+                <span>3 of 4</span>
+              </div>
+            </div>
+            <div class="foot"></div>
+            <div class="home"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slot">
+        <span class="lbl"><b>K-05</b>Game frame</span>
+        <div class="device" data-shot="k05-game">
+          <div class="screen kid">
+            <div class="island"></div>
+            <div class="sb">
+              <span>9:41</span>
+              <span class="ic">
+                <svg><use href="#sb-signal" /></svg>
+                <svg><use href="#sb-wifi" /></svg>
+                <svg class="batt"><use href="#sb-batt" /></svg>
+              </span>
+            </div>
+            <div class="gtop">
+              <div class="pl turn">
+                <span class="kav maja">M</span>
+                <span class="pn">Maja</span>
+              </div>
+              <div class="pl">
+                <span class="kav leo">L</span>
+                <span>Leo</span>
+              </div>
+              <div class="pl">
+                <div class="ag s72">
+                  <img src="../assets/agents/robo-head.svg" alt="" />
+                </div>
+                <span>Robo</span>
+              </div>
+              <span class="score" aria-label="Team score 5">
+                <svg class="fill"><use href="#i-star" /></svg>
+                5
+              </span>
+              <button class="round lg" type="button" aria-label="Pause">
+                <svg class="i fill"><use href="#i-pause" /></svg>
+              </button>
+            </div>
+            <div class="task">
+              <b>6 × 7 = ?</b>
+              <span>6 of 10</span>
+            </div>
+            <div class="canvas">
+              <svg aria-hidden="true"><rect width="100%" height="100%" fill="url(#grid)" /></svg>
+              <div class="cv-label">
+                <svg class="i"><use href="#i-pad" /></svg>
+                <b>Game canvas</b>
+                <span>Engine output, Phaser<br />Collect template, not drawn here</span>
+              </div>
+              <span class="room">Room KQZT</span>
+              <div class="hintrow">
+                <div class="ag s88 bob">
+                  <img src="../assets/agents/robo-idle.svg" alt="Robo" />
+                </div>
+                <p class="say l robo">Close! Try counting by 7s. Maja, your turn!</p>
+              </div>
+            </div>
+            <div class="home"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slot">
+        <span class="lbl"><b>K-06</b>Win</span>
+        <div class="device" data-shot="k06-win">
+          <div class="screen kid">
+            <svg class="chalk" aria-hidden="true"><rect width="100%" height="100%" fill="url(#chalk)" /></svg>
+            <i class="cf c1"></i>
+            <i class="cf c2"></i>
+            <i class="cf c3 round-cf"></i>
+            <i class="cf c4"></i>
+            <i class="cf c5 round-cf"></i>
+            <i class="cf c6"></i>
+            <i class="cf c7 round-cf"></i>
+            <i class="cf c8"></i>
+            <div class="island"></div>
+            <div class="sb">
+              <span>9:41</span>
+              <span class="ic">
+                <svg><use href="#sb-signal" /></svg>
+                <svg><use href="#sb-wifi" /></svg>
+                <svg class="batt"><use href="#sb-batt" /></svg>
+              </span>
+            </div>
+            <div class="main center">
+              <div class="stars" aria-label="3 stars">
+                <svg><use href="#star-st" /></svg>
+                <svg class="big"><use href="#star-st" /></svg>
+                <svg><use href="#star-st" /></svg>
+              </div>
+              <h1 class="h-kid">You did it, Maja!</h1>
+              <div class="lead">
+                <div class="ag s120 done">
+                  <img src="../assets/agents/robo-done.svg" alt="Robo cheering" />
+                  <span class="ok lg"><svg class="i"><use href="#i-check" /></svg></span>
+                </div>
+                <p class="say l robo">Rex is proud of the team!</p>
+              </div>
+              <div class="scorecard">
+                <b>9 of 10</b>
+                <span>star eggs caught</span>
+                <div class="team">
+                  <div><span class="kav sm maja">M</span>5</div>
+                  <div><span class="kav sm leo">L</span>4</div>
+                  <div><span class="ag s44"><img src="../assets/agents/robo-head.svg" alt="" /></span>3 hints</div>
+                </div>
+              </div>
+            </div>
+            <div class="foot row">
+              <button class="cta half" type="button">
+                <svg class="i"><use href="#i-refresh" /></svg>
+                Play again
+              </button>
+              <button class="cta white half" type="button">New game</button>
+            </div>
+            <div class="home"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slot">
+        <span class="lbl"><b>K-07</b>Join a friend</span>
+        <div class="device" data-shot="k07-join">
+          <div class="screen kid">
+            <svg class="chalk" aria-hidden="true"><rect width="100%" height="100%" fill="url(#chalk)" /></svg>
+            <div class="island"></div>
+            <div class="sb">
+              <span>9:41</span>
+              <span class="ic">
+                <svg><use href="#sb-signal" /></svg>
+                <svg><use href="#sb-wifi" /></svg>
+                <svg class="batt"><use href="#sb-batt" /></svg>
+              </span>
+            </div>
+            <header class="bar">
+              <button class="round lg" type="button" aria-label="Back">
+                <svg class="i"><use href="#i-back" /></svg>
+              </button>
+              <h1>Join a friend</h1>
+              <span class="pill has-head">
+                <span class="kav sm leo">L</span>
+                Leo
+              </span>
+            </header>
+            <div class="main tight mid">
+              <div class="lead">
+                <div class="ag s104 bob">
+                  <img src="../assets/agents/robo-idle.svg" alt="Robo" />
+                </div>
+                <p class="say l robo">Ask Maja for the room code!</p>
+              </div>
+              <div class="codebox" role="textbox" aria-label="Room code">
+                <span>K</span>
+                <span>Q</span>
+                <span>Z</span>
+                <span class="cur">T</span>
+              </div>
+              <button class="cta" type="button">
+                Join Maja's game
+                <svg class="i"><use href="#i-arrow" /></svg>
+              </button>
+            </div>
+            <div class="kb" aria-hidden="true">
+              <div><i>Q</i><i>W</i><i>E</i><i>R</i><i>T</i><i>Y</i><i>U</i><i>I</i><i>O</i><i>P</i></div>
+              <div><i>A</i><i>S</i><i>D</i><i>F</i><i>G</i><i>H</i><i>J</i><i>K</i><i>L</i></div>
+              <div><i class="m">⇧</i><i>Z</i><i>X</i><i>C</i><i>V</i><i>B</i><i>N</i><i>M</i><i class="m">⌫</i></div>
+              <div><i class="m">123</i><i class="w">space</i><i class="go">join</i></div>
+            </div>
+            <div class="home dark"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

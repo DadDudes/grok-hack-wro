@@ -1,0 +1,38 @@
+:root {
+  --color-teal: #0A7D73;
+  --color-sun: #FFC233;
+  --color-tangerine: #FF8A3D;
+  --color-pink: #FF6FA5;
+  --color-cap-blue: #3A6186;
+  --color-cheek: #FFB3C7;
+  --color-ink: #13283A;
+  --color-cream: #F3FBF9;
+  --color-white: #FFFFFF;
+  --font-display: Fredoka, sans-serif;
+  --font-display-weight: 600;
+  --font-ui: Figtree, sans-serif;
+  --text-hero: 44px;
+  --text-h1: 32px;
+  --text-h2: 24px;
+  --text-h3: 20px;
+  --text-body: 17px;
+  --text-small: 15px;
+  --text-kid-min: 18px;
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+  --radius-pill: 999px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --shadow-sticker: 5px 6px 0 #13283A;
+  --shadow-sticker-sm: 3px 4px 0 #13283A;
+  --border-ink: 3px solid #13283A;
+  --button-min-height: 56px;
+  --button-radius: 22px;
+}

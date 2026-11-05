@@ -1,0 +1,42 @@
+[
+  {
+    "key": "prof",
+    "name": "Prof",
+    "role": "Pedagogue",
+    "side": "Parent",
+    "color": "#4CC9F0",
+    "line": "Multiplication to 50 for age 8. I made 10 tasks, easy to hard."
+  },
+  {
+    "key": "spark",
+    "name": "Spark",
+    "role": "Game Designer",
+    "side": "Kid",
+    "color": "#FF6FA5",
+    "line": "Dinosaurs in space! Catch star eggs, dodge comets or beat the space boss?"
+  },
+  {
+    "key": "doodle",
+    "name": "Doodle",
+    "role": "Artist",
+    "side": "Kid",
+    "color": "#2ED3A0",
+    "line": "Painting Rex, his rocket and four shiny space rocks..."
+  },
+  {
+    "key": "robo",
+    "name": "Robo",
+    "role": "Teammate",
+    "side": "Kid",
+    "color": "#FFC233",
+    "line": "Close! Try counting by 7s. Maja, your turn!"
+  },
+  {
+    "key": "lens",
+    "name": "Lens",
+    "role": "Analyst",
+    "side": "Parent",
+    "color": "#FF8A3D",
+    "line": "Maja went from 40% to 75%. Practise 7x and 8x next."
+  }
+]

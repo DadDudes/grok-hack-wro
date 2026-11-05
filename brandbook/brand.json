@@ -1,0 +1,32 @@
+{
+  "product": "edubotgames",
+  "name": {
+    "status": "chosen",
+    "current": "EduBotGames",
+    "working": null,
+    "placeholder": "Product*",
+    "candidates": [],
+    "rejected": []
+  },
+  "mascot": {
+    "status": "chosen",
+    "animal": null,
+    "name": "Robo (logo PadBot, main character)"
+  },
+  "palette": {
+    "status": "chosen",
+    "current": "C4 Teal Lagoon",
+    "shortlist": []
+  },
+  "mark": {
+    "status": "chosen",
+    "current": "B1 PadBot with mortarboard, tassel = antenna",
+    "kept": [
+      "B Pad bot"
+    ]
+  },
+  "updated": "2026-11-05",
+  "type": {
+    "current": "T2 Fredoka 600 + Figtree"
+  }
+}

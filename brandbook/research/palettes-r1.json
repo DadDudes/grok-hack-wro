@@ -1,0 +1,7 @@
+[
+  {"id": "P1", "name": "Brief: Purple + Sun", "mode": "line", "brand": "#6C4DF6", "ink": "#1E1B3A", "neutral": "#FFF8EC", "accent": "#FFC93C", "mint": "#2ED3A0", "coral": "#FF6B6B", "sample": "Let's play!", "note": "Your brief as is. Mint #2ED3A0, coral #FF6B6B. Sits in the Quizlet and Kahoot family."},
+  {"id": "P1R", "name": "Violet + Sun", "mode": "line", "brand": "#7B3FF2", "ink": "#1E1B3A", "neutral": "#FFF8EC", "accent": "#FFC233", "mint": "#14B88A", "coral": "#FF5D5D", "sample": "Let's play!", "note": "Brief refined: purple pushed to violet, away from Quizlet blue. Mint #14B88A, coral #FF5D5D."},
+  {"id": "P2", "name": "Lagoon + Sun", "mode": "line", "brand": "#08756A", "ink": "#12283A", "neutral": "#F4FBF8", "accent": "#FFB020", "mint": "#7BD8C9", "coral": "#FF5D73", "sample": "Let's play!", "note": "Open territory: no kids edu brand is teal. Calm for parents. Mint #7BD8C9, coral #FF5D73."},
+  {"id": "P3", "name": "Sunbeam + Violet", "mode": "ground", "brand": "#FFD23F", "ink": "#1D1A2F", "neutral": "#FFFBEE", "accent": "#7B3FF2", "mint": "#21C08B", "coral": "#FF5C5C", "sample": "Let's play!", "note": "Yellow as the ground, ink marks, violet dots. Loudest in a feed. Near Toca Boca yellow."},
+  {"id": "P4", "name": "Berry + Sky", "mode": "dark", "brand": "#CC2F68", "ink": "#2A1230", "neutral": "#FFF5F8", "accent": "#5CD3FF", "mint": "#3DDC97", "coral": "#FFB020", "sample": "Let's play!", "note": "Bold and open: berry ground, cream marks, sky dots. Nobody in kids edu sits here."}
+]

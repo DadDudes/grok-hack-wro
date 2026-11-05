@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EduBotGames web kid screens 2</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Fredoka:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/tokens.css" />
+    <link rel="stylesheet" href="../assets/screens.css" />
+    <link rel="stylesheet" href="../assets/ebg.css" />
+    <link rel="stylesheet" href="../assets/web-kid2.css" />
+  </head>
+  <body>
+    <svg class="defs" width="0" height="0" aria-hidden="true">
+      <defs>
+        <symbol id="i-lock" viewBox="0 0 24 24">
+          <rect width="18" height="11" x="3" y="11" rx="2" />
+          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+        </symbol>
+        <symbol id="i-back" viewBox="0 0 24 24">
+          <path d="m12 19-7-7 7-7" />
+          <path d="M19 12H5" />
+        </symbol>
+        <symbol id="i-fwd" viewBox="0 0 24 24">
+          <path d="m12 5 7 7-7 7" />
+          <path d="M5 12h14" />
+        </symbol>
+        <symbol id="i-arrow" viewBox="0 0 24 24">
+          <path d="M5 12h14" />
+          <path d="m12 5 7 7-7 7" />
+        </symbol>
+        <symbol id="i-check" viewBox="0 0 24 24">
+          <path d="M20 6 9 17l-5-5" />
+        </symbol>
+        <symbol id="i-pause" viewBox="0 0 24 24">
+          <rect x="14" y="4" width="4" height="16" rx="1" />
+          <rect x="6" y="4" width="4" height="16" rx="1" />
+        </symbol>
+        <symbol id="i-spark" viewBox="0 0 24 24">
+          <path
+            d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.14-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.14a.5.5 0 0 1 .96 0L14.06 8.5a2 2 0 0 0 1.44 1.44l6.14 1.58a.5.5 0 0 1 0 .96L15.5 14.06a2 2 0 0 0-1.44 1.44l-1.58 6.14a.5.5 0 0 1-.96 0z"
+          />
+        </symbol>
+        <symbol id="i-refresh" viewBox="0 0 24 24">
+          <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+          <path d="M21 3v5h-5" />
+          <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+          <path d="M8 16H3v5" />
+        </symbol>
+        <symbol id="i-pad" viewBox="0 0 24 24">
+          <path d="M6 11h4M8 9v4M15 12h.01M18 10h.01" />
+          <path
+            d="M17.32 5H6.68a4 4 0 0 0-3.98 3.59C2.6 9.42 2 14.46 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.41-1.41A2 2 0 0 1 9.83 16h4.34a2 2 0 0 1 1.41.59L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.54-.6-6.58-.69-7.26A4 4 0 0 0 17.32 5z"
+          />
+        </symbol>
+        <symbol id="i-star" viewBox="0 0 48 48">
+          <path
+            d="M24 3 29.6 16.3 44 17.5 33 26.9 36.3 41 24 33.5 11.7 41 15 26.9 4 17.5 18.4 16.3Z"
+            stroke="#13283A"
+            stroke-width="3"
+            stroke-linejoin="round"
+          />
+        </symbol>
+        <symbol id="star-st" viewBox="0 0 52 52">
+          <path
+            d="M24 3 29.6 16.3 44 17.5 33 26.9 36.3 41 24 33.5 11.7 41 15 26.9 4 17.5 18.4 16.3Z"
+            transform="translate(4.5 5.5)"
+            fill="#13283A"
+            stroke="#13283A"
+            stroke-width="3"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M24 3 29.6 16.3 44 17.5 33 26.9 36.3 41 24 33.5 11.7 41 15 26.9 4 17.5 18.4 16.3Z"
+            transform="translate(1.5 1.5)"
+            fill="#FFC233"
+            stroke="#13283A"
+            stroke-width="3"
+            stroke-linejoin="round"
+          />
+        </symbol>
+        <pattern
+          id="chalk"
+          width="150"
+          height="150"
+          patternUnits="userSpaceOnUse"
+        >
+          <g
+            fill="none"
+            stroke="#FFFFFF"
+            stroke-opacity="0.13"
+            stroke-width="2.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M16 18 28 30M28 18 16 30" />
+            <path d="M104 12V30M95 21H113" />
+            <path d="M66 62Q68 71 76 73Q68 75 66 84Q64 75 56 73Q64 71 66 62Z" />
+            <path d="M118 104H136M118 113H136" />
+            <circle cx="26" cy="112" r="7" />
+            <path d="M74 128Q80 120 86 128T98 128" />
+          </g>
+        </pattern>
+        <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
+          <path
+            d="M28 0H0V28"
+            fill="none"
+            stroke="#FFFFFF"
+            stroke-opacity="0.12"
+            stroke-width="1.5"
+          />
+        </pattern>
+      </defs>
+    </svg>
+
+    <div class="board web">
+      <section class="slot">
+        <span class="lbl"><b>K-05</b>Game frame</span>
+        <article class="web-frame" data-shot="k05-game">
+          <div class="browser-bar" aria-hidden="true">
+            <span class="browser-dots"><i></i><i></i><i></i></span>
+            <span class="browser-nav">
+              <svg class="i"><use href="#i-back" /></svg>
+              <svg class="i"><use href="#i-fwd" /></svg>
+            </span>
+            <span class="browser-url">
+              <svg class="i"><use href="#i-lock" /></svg>
+              edubotgames.app/play/KQZT
+            </span>
+          </div>
+          <div class="kid-app">
+            <header class="game-bar">
+              <ul class="players" aria-label="Players">
+                <li class="pl turn">
+                  <span class="kav lg maja">M</span>
+                  <span class="pn">Maja</span>
+                </li>
+                <li class="pl">
+                  <span class="kav lg leo">L</span>
+                  <span class="pn">Leo</span>
+                </li>
+                <li class="pl">
+                  <span class="ag s88">
+                    <img src="../assets/agents/robo-head.svg" alt="" />
+                  </span>
+                  <span class="pn">Robo</span>
+                </li>
+              </ul>
+              <section class="task" aria-label="Question">
+                <b>6 × 7 = ?</b>
+                <span>6 of 10</span>
+              </section>
+              <span class="score" aria-label="Team score 5">
+                <svg class="fill"><use href="#i-star" /></svg>
+                5
+              </span>
+              <button class="round xl" type="button" aria-label="Pause">
+                <svg class="i fill"><use href="#i-pause" /></svg>
+              </button>
+            </header>
+            <main class="game-stage">
+              <section class="canvas" aria-label="Game canvas">
+                <svg aria-hidden="true">
+                  <rect width="100%" height="100%" fill="url(#grid)" />
+                </svg>
+                <div class="cv-label">
+                  <svg class="i"><use href="#i-pad" /></svg>
+                  <b>Game canvas</b>
+                  <span
+                    >Engine output, Phaser<br />Collect template, not drawn
+                    here</span
+                  >
+                </div>
+                <span class="room">Room KQZT</span>
+              </section>
+              <aside class="robo-coach" aria-label="Robo's hint">
+                <p class="say d robo hint-bubble">
+                  Close! Try counting by 7s. Maja, your turn!
+                </p>
+                <div class="ag s240 bob">
+                  <img src="../assets/agents/robo-idle.svg" alt="Robo" />
+                </div>
+              </aside>
+            </main>
+          </div>
+        </article>
+      </section>
+
+      <section class="slot">
+        <span class="lbl"><b>K-06</b>Win</span>
+        <article class="web-frame" data-shot="k06-win">
+          <div class="browser-bar" aria-hidden="true">
+            <span class="browser-dots"><i></i><i></i><i></i></span>
+            <span class="browser-nav">
+              <svg class="i"><use href="#i-back" /></svg>
+              <svg class="i"><use href="#i-fwd" /></svg>
+            </span>
+            <span class="browser-url">
+              <svg class="i"><use href="#i-lock" /></svg>
+              edubotgames.app/play/KQZT/win
+            </span>
+          </div>
+          <div class="kid-app party">
+            <svg class="chalk" aria-hidden="true">
+              <rect width="100%" height="100%" fill="url(#chalk)" />
+            </svg>
+            <i class="cf w1"></i>
+            <i class="cf w2 round-cf"></i>
+            <i class="cf w3"></i>
+            <i class="cf w4"></i>
+            <i class="cf w5 round-cf"></i>
+            <i class="cf w6"></i>
+            <i class="cf w7"></i>
+            <i class="cf w8"></i>
+            <i class="cf w9 round-cf"></i>
+            <i class="cf w10"></i>
+            <i class="cf w11 round-cf"></i>
+            <i class="cf w12"></i>
+            <i class="cf w13"></i>
+            <i class="cf w14"></i>
+            <i class="cf w15"></i>
+            <i class="cf w16 round-cf"></i>
+            <main class="win-stage">
+              <div class="stars win-stars" aria-label="3 stars">
+                <svg><use href="#star-st" /></svg>
+                <svg class="big"><use href="#star-st" /></svg>
+                <svg><use href="#star-st" /></svg>
+              </div>
+              <h1 class="h-kid win-title">You did it, Maja!</h1>
+              <div class="win-row">
+                <div class="lead win-lead">
+                  <div class="ag s240 done">
+                    <img
+                      src="../assets/agents/robo-done.svg"
+                      alt="Robo cheering"
+                    />
+                    <span class="ok xl"
+                      ><svg class="i"><use href="#i-check" /></svg
+                    ></span>
+                  </div>
+                  <p class="say l robo">Rex is proud of the team!</p>
+                </div>
+                <section class="scorecard win-score" aria-label="Team result">
+                  <b>9 of 10</b>
+                  <span>star eggs caught</span>
+                  <div class="team">
+                    <div><span class="kav lg maja">M</span>5</div>
+                    <div><span class="kav lg leo">L</span>4</div>
+                    <div>
+                      <span class="ag s60"
+                        ><img src="../assets/agents/robo-head.svg" alt=""
+                      /></span>
+                      3 hints
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="win-actions">
+                <button class="cta" type="button">
+                  <svg class="i"><use href="#i-refresh" /></svg>
+                  Play again
+                </button>
+                <button class="cta white" type="button">New game</button>
+              </div>
+            </main>
+          </div>
+        </article>
+      </section>
+
+      <section class="slot">
+        <span class="lbl"><b>K-07</b>Join a friend</span>
+        <article class="web-frame" data-shot="k07-join">
+          <div class="browser-bar" aria-hidden="true">
+            <span class="browser-dots"><i></i><i></i><i></i></span>
+            <span class="browser-nav">
+              <svg class="i"><use href="#i-back" /></svg>
+              <svg class="i"><use href="#i-fwd" /></svg>
+            </span>
+            <span class="browser-url">
+              <svg class="i"><use href="#i-lock" /></svg>
+              edubotgames.app/join
+            </span>
+          </div>
+          <div class="kid-app">
+            <svg class="chalk" aria-hidden="true">
+              <rect width="100%" height="100%" fill="url(#chalk)" />
+            </svg>
+            <header class="kid-bar">
+              <button class="round xl" type="button" aria-label="Back">
+                <svg class="i"><use href="#i-back" /></svg>
+              </button>
+              <div class="kid-title">
+                <h1>Join a friend</h1>
+                <span class="soon-badge">
+                  <svg class="i fill"><use href="#i-spark" /></svg>
+                  Adding soon
+                </span>
+              </div>
+              <span class="pill has-head who-pill">
+                <span class="kav sm leo">L</span>
+                Leo
+              </span>
+            </header>
+            <main class="join-stage">
+              <div class="lead join-lead">
+                <div class="ag s176 bob">
+                  <img src="../assets/agents/robo-idle.svg" alt="Robo" />
+                </div>
+                <p class="say l robo">Ask Maja for the room code!</p>
+              </div>
+              <div
+                class="codebox join-code"
+                role="textbox"
+                aria-label="Room code"
+              >
+                <span>K</span>
+                <span>Q</span>
+                <span>Z</span>
+                <span class="cur">T</span>
+              </div>
+              <button class="cta join-cta" type="button">
+                Join Maja's game
+                <svg class="i"><use href="#i-arrow" /></svg>
+              </button>
+            </main>
+          </div>
+        </article>
+      </section>
+    </div>
+  </body>
+</html>

@@ -9,3 +9,5 @@ dist/
 .DS_Store
 supabase/.temp/
 supabase/.branches/
+__pycache__/
+brandbook/_shots/
