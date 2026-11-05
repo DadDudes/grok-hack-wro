@@ -3,6 +3,7 @@
   "private": true,
   "workspaces": [
     "backend",
+    "frontend",
     "packages/*"
   ],
   "scripts": {
@@ -11,7 +12,9 @@
     "typecheck": "npm run typecheck --workspace @grok-hack/api-contract && npm run typecheck --workspace @grok-hack/api",
     "test": "npm run test --workspace @grok-hack/api-contract && npm run test --workspace @grok-hack/api",
     "exercise": "npm run exercise --workspace @grok-hack/api",
-    "start": "npm run start --workspace @grok-hack/api"
+    "start": "npm run start --workspace @grok-hack/api",
+    "dev:web": "npm run dev --workspace @edubot/web",
+    "dev:api": "npm run dev --workspace @grok-hack/api"
   },
   "engines": {
     "node": ">=22"
