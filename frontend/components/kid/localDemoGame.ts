@@ -14,6 +14,7 @@ export function localDemoGame(goal: Goal, kidIdea: string): Game {
     childAge: goal.age,
     language: goal.language,
     status: 'ready',
+    template: null,
     gameUrl: LOCAL_DEMO_GAME_URL,
     graphics: { thumbnailUrl: null, coverUrl: null, assetUrls: [] },
     error: null,
