@@ -15,15 +15,25 @@ export type DeployedGame = {
  * 3. Wildcard subdomain. Point `{gameId}.games.<domain>` at option 1 or 2
  *    with a Vercel alias or a host-based rewrite.
  *
- * The stub does not call Vercel. It returns a placeholder URL.
+ * Until that exists, a configured Supabase project uses the public URL of the
+ * uploaded `index.html`. Otherwise the URL is a placeholder on `.invalid`.
  */
-export async function deployGame(gameId: string, bundle: { assetUrls: string[] }): Promise<DeployedGame> {
+export async function deployGame(
+  gameId: string,
+  bundle: { assetUrls: string[] },
+): Promise<DeployedGame> {
+  if (bundle.assetUrls.length === 0) {
+    throw new Error('Refusing to describe a deployment with no assets.');
+  }
+
+  const storedIndex = bundle.assetUrls.find((url) => url.endsWith('/index.html'));
+  if (process.env.SUPABASE_URL?.trim() && storedIndex) {
+    return { gameUrl: storedIndex };
+  }
+
   const base = (process.env.GAME_PUBLIC_URL_BASE ?? 'https://games.example.invalid').replace(
     /\/$/,
     '',
   );
-  if (bundle.assetUrls.length === 0) {
-    throw new Error('Refusing to describe a deployment with no assets.');
-  }
   return { gameUrl: `${base}/${gameId}` };
 }

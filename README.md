@@ -12,19 +12,20 @@ The API is a Next.js App Router app in [`backend/`](backend), deployed as its ow
 
 The request and response types live in [`packages/api-contract`](packages/api-contract). That package depends only on Zod, so the frontend can import it without depending on Next.js.
 
-Records and files are planned for Supabase (Postgres plus a public storage bucket). The stub runs with no keys and no database.
+Records and files go to Supabase when `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are set. With those unset, the API keeps games in process memory and returns placeholder URLs.
 
 ## Layout
 
 ```text
 backend/                     Next.js API. Vercel Root Directory.
+  app/page.tsx               Temporary developer test form at /
   app/api/games/             POST /api/games
   app/api/games/[id]/        GET /api/games/:id
   app/api/health/            GET /api/health
   lib/games/                 Create, read, memory store, Supabase store
-  lib/services/              Stubs: code, graphics, storage, deploy
+  lib/services/              Code and graphics stubs; real Storage upload when configured
   lib/supabase/              Service-role client
-  vercel.ts                  Vercel project config for this directory
+  vercel.ts                  Install/build commands for Root Directory = backend
 packages/api-contract/       Shared Zod schemas and TypeScript types
 docs/api-contract.md         Contract for the frontend
 docs/openapi.yaml            The same contract as OpenAPI 3.1
@@ -42,15 +43,15 @@ frontend  ──POST /api/games──►  API validates (Zod)
                                     │
                                     ├─ insert row (status queued)
                                     ├─ generate game code     TODO xAI Grok
-                                    ├─ generate graphics      TODO image model
-                                    ├─ store files            TODO Supabase Storage
-                                    └─ publish a URL          TODO Vercel (see below)
+                                    ├─ generate graphics      TODO image model (SVG placeholder today)
+                                    ├─ store files            Supabase Storage when configured
+                                    └─ publish a URL          stored index.html, or a placeholder
         ▲
         └── 201 Game { id, gameUrl, graphics, status }
 frontend  ──GET /api/games/:id──►  poll while queued or generating
 ```
 
-The stub runs those steps in the request and returns `status: "ready"` with `https://*.example.invalid/...` URLs. Those hosts are reserved examples and do not resolve. `GET` returns the same record from memory.
+The pipeline runs inside the request and returns `status: "ready"`. Without Supabase, URLs use `https://*.example.invalid/...`, which does not resolve, and `GET` reads the memory store. With Supabase, the row is written to `public.games`, the files are uploaded to `game-assets`, `gameUrl` is the public `index.html` object, and `/api/health` reports `"storage": "supabase"`.
 
 When the model calls are real, return `queued` immediately and finish in a background workflow. The `GET` route is already the status endpoint.
 
@@ -82,6 +83,12 @@ const response = await fetch(`${base}${apiPaths.games}`, {
 const game = (await response.json()) as Game;
 ```
 
+## Developer test page
+
+`/` is a plain form (parent prompt, child prompt, optional age and language) that calls `POST /api/games` and shows the JSON, `gameUrl`, and thumbnail. It links to `/api/health`.
+
+This page is a temporary developer test UI on the API deployment. It is not the colleague's parent or child frontend, and it is not the visual design for the product. Put that app in a sibling folder such as `frontend/`.
+
 ## Run locally
 
 Node.js 22 or newer.
@@ -91,7 +98,7 @@ npm install
 npm run dev
 ```
 
-The stub needs no `.env`. To point at real services later:
+The memory path needs no `.env`. To persist games, copy the example and set the Supabase variables:
 
 ```bash
 cp .env.example backend/.env.local
@@ -120,15 +127,15 @@ npm run build
 | Variable | Used by the stub | Purpose |
 | --- | --- | --- |
 | `XAI_API_KEY` | no | xAI Grok, for game-code generation |
-| `SUPABASE_URL` | when both are set | Postgres and Storage |
-| `SUPABASE_SERVICE_ROLE_KEY` | when both are set | Server-only. Bypasses RLS. Never `NEXT_PUBLIC_` |
+| `SUPABASE_URL` | yes, when set with the service role key | Postgres and Storage. Health then reports `supabase` |
+| `SUPABASE_SERVICE_ROLE_KEY` | yes, when set with the URL | Server-only. Bypasses RLS. Never `NEXT_PUBLIC_` |
 | `VERCEL_TOKEN` | no | Deployment API for one URL per game |
 | `VERCEL_TEAM_ID` | no | Team that owns those deployments |
 | `CORS_ORIGINS` | yes, has a default | Comma-separated browser origins |
 | `GAME_PUBLIC_URL_BASE` | optional | Replaces `https://games.example.invalid` |
 | `GAME_ASSET_BASE_URL` | optional | Replaces `https://cdn.example.invalid/game-assets` |
 
-If the Supabase variables are unset, `GET /api/health` reports `"storage": "memory"`. Memory lasts for one `next dev` process.
+If either Supabase variable is unset, `GET /api/health` reports `"storage": "memory"`. Memory lasts for one Node process. Apply `supabase/migrations/20261105175328_create_games.sql` before the first persisted write. That migration creates `public.games` and the `game-assets` bucket.
 
 ## Supabase
 
@@ -140,9 +147,27 @@ See [supabase/README.md](supabase/README.md).
 
 ## Deploying this API
 
-Create a Vercel project for this repo and set **Root Directory** to `backend`. Keep "include source files outside the root directory" enabled so the workspace package `packages/api-contract` is available. [`backend/vercel.ts`](backend/vercel.ts) sets the Next.js framework. Functions stay on Node.js. Do not set the Edge runtime.
+Create one Vercel project for this repository. The product frontend, when it exists, should be a second project.
 
-The frontend should be a second Vercel project (or a later service), not a route inside `backend/`.
+| Setting | Value |
+| --- | --- |
+| Root Directory | `backend` |
+| Include source files outside the Root Directory | Enabled (required for `packages/api-contract`) |
+| Framework | Next.js |
+| Install command | `npm install --prefix "$(git rev-parse --show-toplevel)" --workspace=@grok-hack/api` |
+| Build command | `npm run build --prefix "$(git rev-parse --show-toplevel)" --workspace=@grok-hack/api` |
+| Node.js | Default (Fluid Compute). Do not set the Edge runtime |
+
+[`backend/vercel.ts`](backend/vercel.ts) already sets the install and build commands. The `git rev-parse` prefix runs them from the repository root whether Vercel starts in the repo root or in `backend/`.
+
+Environment variables for Production and Preview:
+
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `CORS_ORIGINS` if a browser on another origin calls the API. The test page is same-origin and does not need it.
+- `XAI_API_KEY`, `VERCEL_TOKEN`, and `VERCEL_TEAM_ID` stay empty until those TODOs are implemented.
+
+After deploy, open `/` to submit the form and `/api/health` to confirm `"storage": "supabase"`.
 
 ## Deploying each generated game
 
@@ -155,8 +180,8 @@ Not implemented. Options, in the order worth trying:
 ## Roadmap
 
 - Call Grok for a static HTML/CSS/JS game that teaches `parentPrompt` in the form of `childPrompt`.
-- Generate a thumbnail, a cover, and in-game art. Upload bytes to `game-assets`.
-- Publish each game with one of the options above and store the real `gameUrl`.
+- Generate a thumbnail, a cover, and in-game art. Stub SVGs already upload to `game-assets` when Supabase is configured.
+- Publish each game with one of the options above. Until then, `gameUrl` is the public Storage URL of `index.html` when Supabase is configured.
 - Move the pipeline off the request (Vercel Workflow) and return `queued` from `POST`.
 - Require a parent or teacher credential before generation.
 - List games for the parent panel, if the frontend needs it.

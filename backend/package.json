@@ -9,7 +9,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@grok-hack/api-contract": "*",
+    "@grok-hack/api-contract": "file:../packages/api-contract",
     "@supabase/supabase-js": "^2.119.0",
     "next": "^16.4.5",
     "react": "^19.2.0",

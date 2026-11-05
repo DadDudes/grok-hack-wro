@@ -29,7 +29,7 @@ Public URL, once an object exists:
 
 Uploads are not granted to `anon` or `authenticated`. The service role uploads from the API. A public bucket only opens downloads. If a later client uploads with a user key, upsert needs `INSERT`, `SELECT`, and `UPDATE` policies on `storage.objects`.
 
-`storeGameAssets` in the API does not upload yet. It returns placeholder URLs.
+When `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are set, `storeGameAssets` uploads the stub HTML and SVG files with the service role and returns these public URLs. `gameUrl` points at `{gameId}/index.html`. Without those variables, nothing is uploaded and the API returns placeholder URLs on `.invalid`.
 
 ## Local stack
 

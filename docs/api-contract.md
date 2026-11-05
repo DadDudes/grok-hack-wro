@@ -67,7 +67,7 @@ Unknown fields are rejected.
 }
 ```
 
-`https://*.example.invalid` is a placeholder. Those hosts do not resolve. Real URLs arrive when storage upload and deployment are implemented.
+`https://*.example.invalid` is used when Supabase is not configured. Those hosts do not resolve. When `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are set, `graphics` URLs are public objects in the `game-assets` bucket and `gameUrl` is the uploaded `index.html`. A separate per-game Vercel deployment is still a TODO.
 
 | Field | Notes |
 | --- | --- |
