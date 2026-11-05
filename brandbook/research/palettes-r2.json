@@ -1,0 +1,6 @@
+[
+  {"id": "Q1", "name": "Arcade Pop", "mode": "line", "brand": "#7B3FF2", "ink": "#1E1B3A", "neutral": "#FFF8EC", "accent": "#FFC233", "pad": "#FF6B6B", "cap": "#7B3FF2", "pop": "#14B88A", "extra": "#FF9EC7", "eyes": "#2ED3A0", "note": "Your brief turned into a full colour system: coral pad, violet cap, sun tassel, mint eyes."},
+  {"id": "Q2", "name": "Candy Lab", "mode": "line", "brand": "#CC2F68", "ink": "#22172E", "neutral": "#FFF7FB", "accent": "#FFD23F", "pad": "#4CC9F0", "cap": "#CC2F68", "pop": "#9BDB4D", "extra": "#FFB3CF", "eyes": "#4CC9F0", "note": "Sky pad, berry cap, lime pop. Sweet and loud, far from the violet crowd."},
+  {"id": "Q3", "name": "Lagoon Arcade", "mode": "line", "brand": "#08756A", "ink": "#13283A", "neutral": "#F3FBF9", "accent": "#FF6FA5", "pad": "#FFD23F", "cap": "#08756A", "pop": "#FF8A3D", "extra": "#FF8A3D", "eyes": "#7BD8C9", "note": "Sun pad, teal cap, pink tassel. Fresh summer, calm enough for parents."},
+  {"id": "Q4", "name": "Electric Sunset", "mode": "line", "brand": "#6C3CE0", "ink": "#1D1A2F", "neutral": "#FFF8F0", "accent": "#FFD23F", "pad": "#FF8A3D", "cap": "#6C3CE0", "pop": "#22C7E8", "extra": "#E4368B", "eyes": "#22C7E8", "note": "Your first reference: violet to magenta to sun, cyan pops. Most energy, busiest."}
+]
