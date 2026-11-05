@@ -1,0 +1,252 @@
+openapi: 3.1.0
+info:
+  title: Grok Hack Wrocław games API
+  version: 0.1.0
+  description: |
+    Backend contract for generated learning games. The TypeScript schemas in
+    `packages/api-contract` are the source of truth. This document mirrors them.
+    Generation, image upload, and per-game deployment are stubbed.
+servers:
+  - url: http://localhost:3001
+    description: Local `npm run dev`
+tags:
+  - name: games
+  - name: meta
+paths:
+  /api/health:
+    get:
+      tags: [meta]
+      operationId: getHealth
+      summary: Process health and which store is active
+      responses:
+        '200':
+          description: The API process is up.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+        '500':
+          description: Unexpected failure.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    options:
+      tags: [meta]
+      operationId: optionsHealth
+      summary: CORS preflight
+      responses:
+        '204':
+          description: CORS headers only.
+  /api/games:
+    post:
+      tags: [games]
+      operationId: createGame
+      summary: Create a game from a learning goal and a child's description
+      description: |
+        Validates the body and returns the game record. The stub finishes
+        inline and returns `status: ready` with placeholder URLs. A later
+        async pipeline may return `queued` instead. Poll `GET /api/games/{id}`
+        until `ready` or `failed`. `201` means the row was stored. Read `status`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGameRequest'
+            example:
+              parentPrompt: 'Ułamki zwykłe: dodawanie o tym samym mianowniku.'
+              childPrompt: 'Gra platformowa, w której zbieram monety-ułamki.'
+              childAge: 10
+              language: pl
+      responses:
+        '201':
+          description: Game row stored. Inspect `status`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+        '400':
+          description: Body was not JSON, or it failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: The row could not be stored.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    options:
+      tags: [games]
+      operationId: optionsGames
+      summary: CORS preflight
+      responses:
+        '204':
+          description: CORS headers only.
+  /api/games/{id}:
+    get:
+      tags: [games]
+      operationId: getGame
+      summary: Fetch one game, including generation status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: The game.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+        '400':
+          description: `id` is not a UUID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: No game with that id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: The store could not be read.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    options:
+      tags: [games]
+      operationId: optionsGame
+      summary: CORS preflight
+      responses:
+        '204':
+          description: CORS headers only.
+components:
+  schemas:
+    CreateGameRequest:
+      type: object
+      additionalProperties: false
+      required: [parentPrompt, childPrompt]
+      properties:
+        parentPrompt:
+          type: string
+          minLength: 1
+          maxLength: 4000
+          description: What the parent or teacher wants the child to learn.
+        childPrompt:
+          type: string
+          minLength: 1
+          maxLength: 4000
+          description: The game the child asked for, already transcribed if they spoke.
+        childAge:
+          type: integer
+          minimum: 3
+          maximum: 18
+        language:
+          type: string
+          minLength: 2
+          maxLength: 16
+          description: BCP 47 language tag, for example `pl` or `en`.
+    GameStatus:
+      type: string
+      enum: [queued, generating, ready, failed]
+    GameGraphics:
+      type: object
+      required: [thumbnailUrl, coverUrl, assetUrls]
+      properties:
+        thumbnailUrl:
+          type: [string, 'null']
+        coverUrl:
+          type: [string, 'null']
+        assetUrls:
+          type: array
+          items:
+            type: string
+            minLength: 1
+    Game:
+      type: object
+      required:
+        - id
+        - parentPrompt
+        - childPrompt
+        - childAge
+        - language
+        - status
+        - gameUrl
+        - graphics
+        - error
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        parentPrompt:
+          type: string
+        childPrompt:
+          type: string
+        childAge:
+          type: [integer, 'null']
+        language:
+          type: [string, 'null']
+        status:
+          $ref: '#/components/schemas/GameStatus'
+        gameUrl:
+          type: [string, 'null']
+          description: Public URL of the playable game. Null until status is ready.
+        graphics:
+          $ref: '#/components/schemas/GameGraphics'
+        error:
+          type: [string, 'null']
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    FieldError:
+      type: object
+      required: [path, message]
+      properties:
+        path:
+          type: string
+        message:
+          type: string
+    ApiError:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code:
+              type: string
+              enum: [invalid_json, validation_error, not_found, internal_error]
+            message:
+              type: string
+            details:
+              type: array
+              items:
+                $ref: '#/components/schemas/FieldError'
+    Health:
+      type: object
+      required: [ok, service, storage]
+      properties:
+        ok:
+          type: boolean
+          const: true
+        service:
+          type: string
+          const: games-api
+        storage:
+          type: string
+          enum: [memory, supabase]
