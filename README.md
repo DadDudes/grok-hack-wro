@@ -54,6 +54,8 @@
 
 ## The problem
 
+https://github.com/user-attachments/assets/8b84e99f-d853-4711-876d-85ff2a0ca4e3
+
 - Kids use AI to get answers, and the learning gets skipped.
 - Learning apps hand every kid the same game, and kids get bored.
 - Parents and teachers can't tell whether their kid actually improved.
@@ -219,21 +221,8 @@ screens use Fredoka at 18 px and up.
 
 ## Demo
 
-**Promo video (53 s, with sound).** Click the poster to play it.
-
-[![EduBotGames promo video: Parents pick the topic. Kids pick the game.](docs/promo/poster.png)](docs/promo/edubotgames-promo.mp4)
-
-<video
-  src="docs/promo/edubotgames-promo.mp4"
-  poster="docs/promo/poster.png"
-  controls
-  width="100%"
-></video>
-
-![EduBotGames teaser: the AI agents build the game live](docs/promo/edubotgames-promo-preview.gif)
-
-The 40% to 75% jump is example data for the demo. Join a friend appears in the video with an
-"Adding soon" badge.
+The promo video is at the top of [The problem](#the-problem). The 40% to 75% jump is example data
+for the demo. Join a friend appears in the video with an "Adding soon" badge.
 
 ## Brand
 
