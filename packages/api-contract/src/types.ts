@@ -4,6 +4,7 @@ import type {
   apiErrorCodeSchema,
   apiErrorSchema,
   createGameRequestSchema,
+  createGameTaskSchema,
   fieldErrorSchema,
   gameGraphicsSchema,
   gameResultRequestSchema,
@@ -12,9 +13,12 @@ import type {
   gameStatusSchema,
   gameTemplateSchema,
   healthResponseSchema,
+  requestedTemplateSchema,
 } from './schemas.ts';
 
 export type CreateGameRequest = z.infer<typeof createGameRequestSchema>;
+export type CreateGameTask = z.infer<typeof createGameTaskSchema>;
+export type RequestedTemplate = z.infer<typeof requestedTemplateSchema>;
 export type Game = z.infer<typeof gameSchema>;
 export type GameStatus = z.infer<typeof gameStatusSchema>;
 export type GameTemplate = z.infer<typeof gameTemplateSchema>;

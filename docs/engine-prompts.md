@@ -1,9 +1,10 @@
 # Prompts the frontend sends to the game engine
 
-`POST /api/games` accepts only `parentPrompt`, `childPrompt`, `childAge` and `language`
-(see [api-contract.md](./api-contract.md)). Our agents run before the engine, so their output travels
-inside the two prompts as plain, readable text. One fact per line, so the engine can read it as text
-or split it by line.
+`POST /api/games` accepts `parentPrompt`, `childPrompt`, `childAge` and `language`, plus optional
+`questionCount`, `template` (`collect`, `runner`, `quiz`, or `quiz_battle`) and `tasks`
+(see [api-contract.md](./api-contract.md)). The app sends those structured fields and also keeps
+the same facts in the two prompts, one per line, so an older client still works. Structured fields
+win when both are present. `quiz_battle` is played as the `quiz` template.
 
 ## `parentPrompt`: what to learn
 

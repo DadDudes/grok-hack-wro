@@ -178,12 +178,12 @@ All test rounds so far cost about $0.31 of the $60 budget.
 
 ### Status
 
-- Live: Prof, Spark, Doodle, Robo, speech to text, the build stream and the call to the engine API.
-- The engine itself still returns a placeholder game; real game generation is in progress in
-  `backend/`.
-- Game events: the game posts answers to the app with `postMessage`
-  ([docs/game-events.md](docs/game-events.md)). Until the engine sends them, Lens uses the demo
-  report.
+- Live: Prof, Spark, Doodle, Robo, speech to text, the build stream, and the Phaser engine.
+- One Next.js app in `backend/` serves the screens and `POST /api/games`. `frontend/` is the source
+  for the screens. `npm run sync:web` copies them in before dev and build.
+- Game events: the Phaser page posts answers to the app with `postMessage`
+  ([docs/game-events.md](docs/game-events.md)). Lens still needs a live `XAI_API_KEY` for the written
+  summary. Accuracy is computed in code.
 - Login is a demo account ([tests/test-accounts.md](tests/test-accounts.md)).
 
 Code: agents in [`frontend/lib/agents/`](frontend/lib/agents), the xAI client in
@@ -319,8 +319,8 @@ flowchart LR
 ## Project structure
 
 ```text
-frontend/       the web app: screens, agents, route handlers (Next.js)
-backend/        the game engine API (Next.js), Supabase storage
+frontend/       source for the screens and the kid/parent agents (copied into backend before build)
+backend/        the app you deploy: screens, agents, games API, Phaser host (Next.js)
 packages/       shared API contract (zod)
 specs/          product spec, agents and prompts, design brief, API, app flow, pitch, video script
 brandbook/      Brand Guidelines (index.html), assets, tokens, decisions, build scripts in _src/
@@ -340,16 +340,73 @@ Start with the specs:
 
 ## Getting started
 
-Needs Node 22 or newer. Put `XAI_API_KEY` (and the Supabase keys for the engine) in `.env`, then:
+Needs Node 22 or newer. Put secrets in `.env` (see `.env.example`). Never commit that file.
 
 ```bash
+npm install
 ./run.sh
 ```
 
-It installs the workspaces, writes `frontend/.env.local` and `backend/.env.local` from `.env`, and
-starts the engine API on http://localhost:3001 and the app on http://localhost:3000. Log in with the
-demo account from [tests/test-accounts.md](tests/test-accounts.md). Set `NEXT_PUBLIC_FLOW_MOCK=1`
-in `frontend/.env.local` to run the whole flow on demo data without any API calls.
+Open http://127.0.0.1:3001 and log in with the demo account in
+[tests/test-accounts.md](tests/test-accounts.md). With no `XAI_API_KEY`, Prof and Spark use a local
+lesson and the engine draws a shape game. A live key turns on Grok text, Imagine, and speech.
+
+`./run.sh` installs the workspaces when `node_modules` is missing and copies `.env` to
+`backend/.env.local` when that file is missing.
+
+With that server up, this walks health, a generated game, and the screens from login through play:
+
+```bash
+SMOKE_BASE_URL=http://127.0.0.1:3001 npm run smoke --workspace @grok-hack/api
+```
+
+To work on the screens alone, against the API on port 3001:
+
+```bash
+npm run dev:api
+npm run dev:web
+```
+
+`frontend/.env.local` needs `API_BASE_URL=http://127.0.0.1:3001`. Set `NEXT_PUBLIC_FLOW_MOCK=1`
+there to run the screens on demo data without any API calls.
+
+## Deploy
+
+Production is one Vercel project. The GitHub app cannot see this org, so deploy with the CLI.
+The upload root is `backend/`. Do not push this branch to `main`, and do not merge it, until you
+have tried the preview.
+
+```bash
+npm install
+npm run sync:web
+cd backend
+npx vercel link --yes --project grok-hack-wro
+npx vercel deploy --prod --yes
+```
+
+`npm run build` inside `backend/` vendors `packages/api-contract` and, when `../frontend` is
+present, refreshes the UI copy. A backend-only upload uses the copy already in the repo.
+`/api/games`, `/api/health`, `/play/{uuid}`, and `/phaser/runtime.js` stay on this app. Kid screens
+are `/play`, `/play/pick`, `/play/building`, `/play/game`, and `/play/win`.
+
+Set these in the Vercel project. Do not commit the values.
+
+| Name | Required | Purpose |
+| --- | --- | --- |
+| `XAI_API_KEY` | for live agents and drawn art | Without it, local lessons and shape art |
+| `XAI_MODEL` | no | Default `grok-4.7` |
+| `XAI_IMAGE_MODEL` | no | App default `grok-imagine-image-2.0`. Engine default `grok-imagine-image` |
+| `XAI_STT_MODEL` | no | Speech. Default `grok-voice-transcribe-2.0` |
+| `XAI_REASONING_EFFORT` | no | Engine default `low` |
+| `SUPABASE_URL` | for production games | Server only. Do not use a `NEXT_PUBLIC_` prefix |
+| `SUPABASE_SERVICE_ROLE_KEY` | with the URL | Bypasses RLS |
+| `PUBLIC_BASE_URL` | yes on Vercel | `https://grok-hack-wro.vercel.app`. Used in `gameUrl` |
+| `API_BASE_URL` | no | Leave unset here. The app calls the engine in-process |
+| `CORS_ORIGINS` | no | Extra browser origins. Same-origin pages do not need it |
+| `GAME_STORE` | no | `memory` forces the process-local store |
+
+Apply `supabase/migrations` before the first production game. `GET /api/health` reports
+`storage: supabase` when the keys are set.
 
 Rebuild the brand assets:
 

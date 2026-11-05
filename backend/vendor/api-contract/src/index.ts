@@ -4,6 +4,7 @@ export {
   apiErrorSchema,
   apiPaths,
   createGameRequestSchema,
+  createGameTaskSchema,
   fieldErrorSchema,
   gameGraphicsSchema,
   gameResultRequestSchema,
@@ -13,11 +14,14 @@ export {
   gameTemplateSchema,
   healthResponseSchema,
   promptLimits,
+  requestedTemplateSchema,
 } from './schemas.ts';
 export type {
   ApiError,
   ApiErrorCode,
   CreateGameRequest,
+  CreateGameTask,
+  RequestedTemplate,
   FieldError,
   Game,
   GameGraphics,

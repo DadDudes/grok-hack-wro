@@ -7,6 +7,7 @@
     "packages/*"
   ],
   "scripts": {
+    "sync:web": "npm run sync:web --workspace @grok-hack/api",
     "dev": "npm run dev --workspace @grok-hack/api",
     "build": "npm run typecheck --workspace @grok-hack/api-contract && npm run build --workspace @grok-hack/api",
     "typecheck": "npm run typecheck --workspace @grok-hack/api-contract && npm run typecheck --workspace @grok-hack/api",

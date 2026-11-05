@@ -73,4 +73,5 @@ export const demoReport: Report = {
   weakSkills: ['7x table', '8x table'],
   parentSummary: 'Maja went from 40% to 75%. Practise 7x and 8x next.',
   pedagogueFeedback: 'Put more tasks on the 7x and 8x tables, keep the dinosaur theme.',
+  measured: true,
 };

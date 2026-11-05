@@ -1,6 +1,7 @@
 import { templateInstructions, uiTexts } from '@/lib/game-spec/copy';
 import { fallbackGameSpec, normalizeTasks, type SpecRequest } from '@/lib/game-spec/fallback';
 import { ageBand, resolveLanguage, taskCountForAge, uiLanguage } from '@/lib/game-spec/language';
+import { lessonOverrides, type LessonOverrides } from '@/lib/game-spec/request-fields';
 import {
   gameSpecSchema,
   type DesignerOutput,
@@ -51,11 +52,21 @@ export function defaultImagePrompts(spec: GameSpec): Record<ImageSlot, string> {
   };
 }
 
-function specFromAgents(input: SpecRequest, pedagog: PedagogOutput, design: DesignerOutput | null): BuiltGame {
+function questionLimit(input: SpecRequest, overrides: LessonOverrides): number {
+  if (overrides.questionCount !== undefined) return Math.min(10, Math.max(3, overrides.questionCount));
+  return taskCountForAge(input.childAge);
+}
+
+function specFromAgents(
+  input: SpecRequest,
+  pedagog: PedagogOutput,
+  design: DesignerOutput | null,
+  overrides: LessonOverrides,
+): BuiltGame {
   const language = resolveLanguage(input.language);
   const ui = uiLanguage(language);
   const local = fallbackGameSpec({ ...input, language });
-  const tasks = normalizeTasks(pedagog.tasks, ui, taskCountForAge(input.childAge));
+  const tasks = normalizeTasks(pedagog.tasks, ui, questionLimit(input, overrides));
 
   if (!design) {
     const spec = gameSpecSchema.parse({
@@ -72,14 +83,15 @@ function specFromAgents(input: SpecRequest, pedagog: PedagogOutput, design: Desi
     return { spec, imagePrompts: xaiConfigured() ? defaultImagePrompts(spec) : null };
   }
 
+  const template = overrides.lockTemplate && overrides.template ? overrides.template : design.template;
   const spec = gameSpecSchema.parse({
     version: 1,
     gameId: input.gameId,
-    template: design.template,
+    template,
     language,
     ageBand: ageBand(input.childAge),
     title: design.title,
-    instructions: design.instructions || templateInstructions(ui, design.template),
+    instructions: design.instructions || templateInstructions(ui, template),
     theme: {
       name: design.themeName,
       characterName: design.characterName,
@@ -117,9 +129,67 @@ function playerFacing(spec: GameSpec): string[] {
  * Pedagog writes the questions. Projektant gry picks the template and theme.
  * A missing key, a failed call, or an unsafe result uses the local spec.
  */
+async function buildFromSupplied(input: SpecRequest, overrides: LessonOverrides): Promise<BuiltGame> {
+  const local = fallbackGameSpec(input);
+  let design: DesignerOutput | null = null;
+  try {
+    design = await once('Projektant gry', () =>
+      runDesigner({
+        childPrompt: input.childPrompt,
+        childAge: input.childAge,
+        language: input.language,
+        tasks: local.tasks,
+        requiredTemplate: overrides.lockTemplate ? overrides.template : undefined,
+      }),
+    );
+  } catch (error) {
+    console.error('Projektant gry unavailable, keeping the local theme', {
+      gameId: input.gameId,
+      error,
+    });
+  }
+
+  if (!design) {
+    return { spec: local, imagePrompts: xaiConfigured() ? defaultImagePrompts(local) : null };
+  }
+
+  try {
+    const template = overrides.lockTemplate && overrides.template ? overrides.template : design.template;
+    const spec = gameSpecSchema.parse({
+      ...local,
+      template,
+      title: design.title,
+      instructions: design.instructions || local.instructions,
+      theme: {
+        name: design.themeName,
+        characterName: design.characterName,
+        palette: design.palette,
+      },
+      texts: design.texts ?? local.texts,
+      source: 'grok',
+      agents: {
+        pedagog: 'client-tasks',
+        designer: textModel(),
+        grafik: imageModel(),
+      },
+    });
+    assertChildSafe(playerFacing(spec));
+    return { spec, imagePrompts: promptsFromDesign(design, spec) };
+  } catch (error) {
+    console.error('Assembled spec rejected, using the local lesson', { gameId: input.gameId, error });
+    return { spec: local, imagePrompts: null };
+  }
+}
+
 export async function buildGameSpec(input: SpecRequest): Promise<BuiltGame> {
+  const overrides = lessonOverrides(input);
+
   if (!xaiConfigured()) {
     return { spec: fallbackGameSpec(input), imagePrompts: null };
+  }
+
+  if (overrides.tasks && overrides.tasks.length >= 3) {
+    return buildFromSupplied(input, overrides);
   }
 
   let pedagog: PedagogOutput;
@@ -141,7 +211,7 @@ export async function buildGameSpec(input: SpecRequest): Promise<BuiltGame> {
     const tasks = normalizeTasks(
       pedagog.tasks,
       uiLanguage(resolveLanguage(input.language)),
-      taskCountForAge(input.childAge),
+      questionLimit(input, overrides),
     );
     design = await once('Projektant gry', () =>
       runDesigner({
@@ -149,6 +219,7 @@ export async function buildGameSpec(input: SpecRequest): Promise<BuiltGame> {
         childAge: input.childAge,
         language: input.language,
         tasks,
+        requiredTemplate: overrides.lockTemplate ? overrides.template : undefined,
       }),
     );
   } catch (error) {
@@ -159,7 +230,7 @@ export async function buildGameSpec(input: SpecRequest): Promise<BuiltGame> {
   }
 
   try {
-    return specFromAgents(input, pedagog, design);
+    return specFromAgents(input, pedagog, design, overrides);
   } catch (error) {
     console.error('Assembled spec rejected, using the local lesson', { gameId: input.gameId, error });
     return { spec: fallbackGameSpec(input), imagePrompts: null };

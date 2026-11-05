@@ -27,6 +27,10 @@ function readEnv(name: string): string | null {
   return value;
 }
 
+export function xaiIsConfigured(): boolean {
+  return readEnv('XAI_API_KEY') !== null;
+}
+
 export function getXaiConfig(): XaiConfig {
   const apiKey = readEnv('XAI_API_KEY');
 

@@ -230,6 +230,54 @@ components:
           minLength: 2
           maxLength: 16
           description: BCP 47 language tag, for example `pl` or `en`.
+        questionCount:
+          type: integer
+          minimum: 1
+          maximum: 10
+          description: How many tasks to play. The Phaser page plays 3 to 10.
+        template:
+          type: string
+          enum: [collect, runner, quiz, quiz_battle]
+          description: Kid-picked game type. `quiz_battle` is stored as `quiz`.
+        tasks:
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/CreateGameTask'
+    CreateGameTask:
+      type: object
+      additionalProperties: false
+      required: [id, question, answer, distractors, difficulty]
+      properties:
+        id:
+          type: string
+          minLength: 1
+          maxLength: 64
+        question:
+          type: string
+          minLength: 1
+          maxLength: 280
+        answer:
+          type: string
+          minLength: 1
+          maxLength: 80
+        distractors:
+          type: array
+          minItems: 2
+          maxItems: 3
+          items:
+            type: string
+            minLength: 1
+            maxLength: 80
+        difficulty:
+          type: integer
+          minimum: 1
+          maximum: 3
+        skill:
+          type: string
+          minLength: 1
+          maxLength: 80
     GameStatus:
       type: string
       enum: [queued, generating, ready, failed]

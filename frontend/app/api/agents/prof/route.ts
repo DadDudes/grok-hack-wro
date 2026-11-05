@@ -1,9 +1,9 @@
 import { agentErrorResponse, agentResponse, parseJsonBody } from '@/app/api/_lib/http';
 import { createTaskPlan } from '@/lib/agents/prof';
-import { goalSchema } from '@/lib/agents/schemas';
+import { profRequestSchema } from '@/lib/agents/schemas';
 
 export async function POST(request: Request): Promise<Response> {
-  const body = await parseJsonBody(request, goalSchema);
+  const body = await parseJsonBody(request, profRequestSchema);
 
   if (!body.ok) {
     return body.response;

@@ -3,7 +3,8 @@ import 'server-only';
 import type { Game } from '@grok-hack/api-contract';
 
 import type { AgentEvent, AgentKey, AgentState, BuildEvent, BuildRequest } from '@/lib/flow/types';
-import { createGame, GamesApiError, waitForGame } from '@/lib/games-api/client';
+import { createAndWait } from '@/lib/games/direct';
+import { GamesApiError } from '@/lib/games-api/client';
 import { buildEnginePrompts, EnginePromptTooLongError } from '@/lib/games-api/prompts';
 import { XaiError } from '@/lib/xai/errors';
 import { errorReason } from '@/lib/xai/transport';
@@ -34,7 +35,7 @@ function safeMessageFor(error: unknown): string {
   return GAME_FAILED_MESSAGE;
 }
 
-async function buildGame(request: BuildRequest, signal: AbortSignal): Promise<GameOutcome> {
+async function buildGame(request: BuildRequest, signal: AbortSignal, origin: string): Promise<GameOutcome> {
   try {
     const prompts = buildEnginePrompts(request);
     const input = {
@@ -42,9 +43,18 @@ async function buildGame(request: BuildRequest, signal: AbortSignal): Promise<Ga
       childPrompt: prompts.childPrompt,
       childAge: request.goal.age,
       language: request.goal.language,
+      questionCount: request.goal.questionCount,
+      template: request.option.template,
+      tasks: request.plan.tasks.map((task) => ({
+        id: task.id,
+        question: task.question,
+        answer: task.answer,
+        distractors: [...task.distractors],
+        difficulty: task.difficulty,
+        skill: task.skill,
+      })),
     };
-    const created = await createGame(input, signal);
-    const finished = await waitForGame(created, signal);
+    const finished = await createAndWait(input, signal, origin);
 
     if (finished.status === 'failed') {
       return { ok: false, message: finished.error ?? GAME_FAILED_MESSAGE };
@@ -81,8 +91,9 @@ export async function runBuild(
   request: BuildRequest,
   emit: EmitBuildEvent,
   signal: AbortSignal,
+  origin: string,
 ): Promise<void> {
-  const gameOutcome = buildGame(request, signal);
+  const gameOutcome = buildGame(request, signal, origin);
   const taskCount = request.plan.tasks.length;
   const title = request.option.title;
 

@@ -131,8 +131,8 @@ export type SessionResult = {
 
 export type SkillScore = {
   skill: string;
-  before: number;
-  now: number;
+  before: number | null;
+  now: number | null;
 };
 
 export type LensRequest = {
@@ -142,13 +142,14 @@ export type LensRequest = {
 };
 
 export type Report = {
-  accuracyBefore: number;
-  accuracyNow: number;
-  delta: number;
+  accuracyBefore: number | null;
+  accuracyNow: number | null;
+  delta: number | null;
   bySkill: SkillScore[];
   weakSkills: string[];
   parentSummary: string;
   pedagogueFeedback: string;
+  measured: boolean;
 };
 
 export type Transcript = {

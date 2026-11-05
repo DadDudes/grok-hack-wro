@@ -94,12 +94,17 @@ export async function runDesigner(input: {
   childAge: number | null;
   language: string | null;
   tasks: LearningTask[];
+  requiredTemplate?: 'collect' | 'runner' | 'quiz';
 }): Promise<DesignerOutput> {
   const language = resolveLanguage(input.language);
   const questions = input.tasks.map((item, index) => `${index + 1}. ${item.prompt}`).join('\n');
+  const required = input.requiredTemplate
+    ? `Required template: ${input.requiredTemplate}. The template field must be exactly "${input.requiredTemplate}".`
+    : '';
   const user = [
     `Language (BCP 47): ${language}`,
     `Learner age: ${input.childAge ?? 8}`,
+    required,
     'Learning questions already written by Pedagog (do not change the answers; they are not shown here):',
     questions,
     '<untrusted_child_wish>',
@@ -113,5 +118,9 @@ export async function runDesigner(input: {
     system,
     user,
   });
-  return designerOutputSchema.parse(raw);
+  const parsed = designerOutputSchema.parse(raw);
+  if (input.requiredTemplate && parsed.template !== input.requiredTemplate) {
+    return { ...parsed, template: input.requiredTemplate };
+  }
+  return parsed;
 }

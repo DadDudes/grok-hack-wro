@@ -4,7 +4,7 @@ The frontend shows the generated game in an iframe at `gameUrl`. Robo's hints an
 to know what the kid answered. This proposal adds no API route: the game posts messages to the page
 that embeds it.
 
-Status: proposal from the frontend. Until the engine sends these events, the frontend uses demo data.
+Status: the Phaser host at `GET /play/{id}` posts `answer` and `finish` to the parent page. The demo page at `/demo-game/` posts the same shape.
 
 ## From the game to the app
 

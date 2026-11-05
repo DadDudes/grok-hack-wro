@@ -86,4 +86,35 @@ describe('fallback pipeline', () => {
       receivedAt: new Date().toISOString(),
     }), false);
   });
+
+  it('stores quiz_battle as quiz and keeps the supplied tasks', async () => {
+    useMemoryStore();
+    const origin = 'http://127.0.0.1:3001';
+    const created = await createGame({
+      parentPrompt: 'Multiplication up to 50',
+      childPrompt: 'dinosaurs in space',
+      childAge: 8,
+      language: 'en',
+      questionCount: 4,
+      template: 'quiz_battle',
+      tasks: [
+        { id: 't1', question: '2 x 5 = ?', answer: '10', distractors: ['7', '12', '25'], difficulty: 1, skill: '2x table' },
+        { id: 't2', question: '3 x 4 = ?', answer: '12', distractors: ['7', '14', '9'], difficulty: 1, skill: '3x table' },
+        { id: 't3', question: '6 x 7 = ?', answer: '42', distractors: ['36', '48', '13'], difficulty: 2, skill: '7x table' },
+        { id: 't4', question: '4 x 7 = ?', answer: '28', distractors: ['24', '32', '11'], difficulty: 2, skill: '4x table' },
+      ],
+    });
+
+    await runGamePipeline(created.id, origin);
+    const ready = await getGame(created.id);
+    assert.equal(ready?.template, 'quiz');
+    const spec = await getGameRepository().getSpec(created.id);
+    assert.ok(spec);
+    assert.equal(spec.template, 'quiz');
+    assert.equal(spec.tasks.length, 4);
+    assert.equal(spec.tasks[0]?.id, 't1');
+    assert.equal(spec.tasks[0]?.answer, '10');
+    assert.equal(spec.rules.goal, 4);
+    assert.equal(spec.source, 'fallback');
+  });
 });
