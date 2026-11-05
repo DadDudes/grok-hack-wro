@@ -1,58 +1,68 @@
 import type { CreateGameRequest, Game } from '@grok-hack/api-contract';
 
-import { deployGame } from '@/lib/services/deploy-game';
 import { generateGameCode } from '@/lib/services/generate-game-code';
 import { generateGraphics } from '@/lib/services/generate-graphics';
+import { deployGame } from '@/lib/services/deploy-game';
 import { storeGameAssets } from '@/lib/services/store-assets';
 
 import type { GameRepository } from './repository';
 import { getGameRepository } from './store';
 
-async function runPipeline(repository: GameRepository, game: Game): Promise<Game> {
-  try {
-    await repository.update(game.id, { status: 'generating' });
-
-    const files = await generateGameCode({
-      parentPrompt: game.parentPrompt,
-      childPrompt: game.childPrompt,
-      childAge: game.childAge,
-      language: game.language,
-    });
-    const graphics = await generateGraphics();
-    const stored = await storeGameAssets(game.id, files, graphics);
-    const deployed = await deployGame(game.id, stored);
-
-    return await repository.update(game.id, {
-      status: 'ready',
-      gameUrl: deployed.gameUrl,
-      thumbnailUrl: stored.thumbnailUrl,
-      coverUrl: stored.coverUrl,
-      assetUrls: stored.assetUrls,
-      error: null,
-    });
-  } catch (error) {
-    console.error('Game pipeline failed', { gameId: game.id, error });
-    return repository.update(game.id, {
-      status: 'failed',
-      error: 'Game generation failed.',
-    });
-  }
-}
-
 /**
- * Creates the game row, then runs the stub pipeline to `ready`.
- *
- * TODO(async): return the queued row from `insert` and run `runPipeline`
- * in a Vercel Workflow. The route should then respond 202 and the client
- * should poll `GET /api/games/:id` until `ready` or `failed`.
+ * Inserts a queued row and returns it. The route schedules `runGamePipeline`
+ * with `after()` so the HTTP response does not wait for generation.
  */
 export async function createGame(input: CreateGameRequest): Promise<Game> {
   const repository = getGameRepository();
-  const game = await repository.insert({
+  return repository.insert({
     parentPrompt: input.parentPrompt,
     childPrompt: input.childPrompt,
     childAge: input.childAge ?? null,
     language: input.language ?? null,
   });
-  return runPipeline(repository, game);
+}
+
+export async function runGamePipeline(
+  gameId: string,
+  origin: string,
+  repository: GameRepository = getGameRepository(),
+): Promise<void> {
+  try {
+    const game = await repository.findById(gameId);
+    if (!game) return;
+
+    await repository.update(gameId, { status: 'generating', error: null });
+    console.info('Generating game', { gameId, language: game.language ?? 'pl' });
+
+    const built = await generateGameCode({
+      gameId,
+      parentPrompt: game.parentPrompt,
+      childPrompt: game.childPrompt,
+      childAge: game.childAge,
+      language: game.language,
+    });
+    const images = await generateGraphics(built);
+    const stored = await storeGameAssets(gameId, origin, built.spec, images);
+    const deployed = deployGame(gameId, origin);
+
+    await repository.saveGenerated(gameId, {
+      spec: stored.spec,
+      template: stored.spec.template,
+      gameUrl: deployed.gameUrl,
+      thumbnailUrl: stored.thumbnailUrl,
+      coverUrl: stored.coverUrl,
+      assetUrls: stored.assetUrls,
+    });
+    console.info('Game ready', { gameId, template: stored.spec.template, source: stored.spec.source });
+  } catch (error) {
+    console.error('Game pipeline failed', { gameId, error });
+    await repository
+      .update(gameId, {
+        status: 'failed',
+        error: 'Game generation failed.',
+      })
+      .catch((updateError) => {
+        console.error('Could not mark the game as failed', { gameId, updateError });
+      });
+  }
 }

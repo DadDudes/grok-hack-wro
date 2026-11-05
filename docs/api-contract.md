@@ -18,9 +18,11 @@ There is no auth on these routes yet. Do not deploy the API with a live model ke
 
 ## `POST /api/games`
 
-Creates a game and, in the current stub, runs the pipeline before responding. The body comes back as `ready` with placeholder URLs.
+Creates a game row and returns **`202`** with `status: "queued"` before generation finishes. The background pipeline (Vercel `after()`, up to `maxDuration` of 300 seconds) moves the row through `generating` to `ready` or `failed`.
 
-When generation moves off the request, this route will return `queued` quickly. Clients should treat that as success and poll `GET /api/games/:id`.
+Poll `GET /api/games/:id` every few seconds. Stop on `ready` or `failed`.
+
+When `ready`, open `gameUrl`. That URL is `{PUBLIC_BASE_URL or request origin}/play/{id}` and serves a Phaser page as `text/html`. It is not a Storage object.
 
 ### Request
 
@@ -42,7 +44,7 @@ Unknown fields are rejected.
 }
 ```
 
-### Response `201`
+### Response `202`
 
 ```json
 {
@@ -51,15 +53,13 @@ Unknown fields are rejected.
   "childPrompt": "Gra platformowa, w której zbieram monety-ułamki.",
   "childAge": 10,
   "language": "pl",
-  "status": "ready",
-  "gameUrl": "https://games.example.invalid/550e8400-e29b-41d4-a716-446655440000",
+  "status": "queued",
+  "template": null,
+  "gameUrl": null,
   "graphics": {
-    "thumbnailUrl": "https://cdn.example.invalid/game-assets/550e8400-e29b-41d4-a716-446655440000/thumbnail.svg",
-    "coverUrl": "https://cdn.example.invalid/game-assets/550e8400-e29b-41d4-a716-446655440000/cover.svg",
-    "assetUrls": [
-      "https://cdn.example.invalid/game-assets/550e8400-e29b-41d4-a716-446655440000/index.html",
-      "https://cdn.example.invalid/game-assets/550e8400-e29b-41d4-a716-446655440000/assets/placeholder.svg"
-    ]
+    "thumbnailUrl": null,
+    "coverUrl": null,
+    "assetUrls": []
   },
   "error": null,
   "createdAt": "2026-11-05T17:50:00.000Z",
@@ -67,20 +67,21 @@ Unknown fields are rejected.
 }
 ```
 
-`https://*.example.invalid` is used when Supabase is not configured. Those hosts do not resolve. When `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are set, `graphics` URLs are public objects in the `game-assets` bucket and `gameUrl` is the uploaded `index.html`. A separate per-game Vercel deployment is still a TODO.
+A later `GET` with `status: "ready"` has `template` (`collect`, `runner`, or `quiz`), `gameUrl` pointing at `/play/{id}`, and graphic URLs. Those graphic URLs are same-origin `/play/{id}/assets/{name}` routes (PNG or JPEG, `Content-Disposition: inline`) so Phaser can load them. When Supabase is configured, the bytes are also stored in the `game-assets` bucket and `spec.json` may appear in `assetUrls`. Thumbnail and cover are not repeated in `assetUrls`.
 
 | Field | Notes |
 | --- | --- |
 | `id` | UUID. |
 | `status` | `queued`, `generating`, `ready`, or `failed`. |
-| `gameUrl` | Public URL of the playable game. Null until `ready`. |
+| `template` | `collect`, `runner`, or `quiz`. Null until generation finishes. |
+| `gameUrl` | `GET /play/{id}` once `ready`. Null before that, including when `failed`. |
 | `graphics.thumbnailUrl` | Cover image for lists. Null until graphics exist. |
 | `graphics.coverUrl` | Larger image. Null until graphics exist. |
 | `graphics.assetUrls` | Bundle and extra art. Empty until files exist. Thumbnail and cover are not repeated here. |
 | `error` | Safe message when `status` is `failed`. Otherwise null. |
 | `childAge`, `language` | Null when the request omitted them. |
 
-`201` means the row was stored. Read `status`. A failed pipeline still returns `201` with `status: "failed"` so the client has an id.
+`202` means the row was stored and generation was scheduled. Read `status` from `GET`. A failed pipeline is `status: "failed"` on that GET, with a generic `error`. The create call itself is `500` only when the row could not be stored.
 
 ## `GET /api/games/:id`
 
@@ -154,9 +155,35 @@ const game = (await created.json()) as Game;
 
 Add the workspace dependency `"@grok-hack/api-contract": "*"` from a package under this repo, or depend on `packages/api-contract` by path.
 
+## `GET /play/{id}`
+
+HTML, not JSON. `Content-Type: text/html`. `Content-Security-Policy: frame-ancestors *` so the product frontend can embed it.
+
+| Status | Body |
+| --- | --- |
+| `200` | Phaser page when `ready`. While `queued` or `generating`, a short page that refreshes itself. A failed game shows `error`. |
+| `400` | The id is not a UUID. |
+| `404` | Unknown id, or a ready row whose spec could not be read. |
+| `500` | The store could not be read. |
+
+`?assets=shapes` renders the same spec with image URLs cleared, so the template draws shapes. The stored spec is unchanged.
+
+The page loads Phaser 3.90 from jsDelivr and `/phaser/runtime.js` from this app. The spec JSON is embedded in the HTML. It is not executed as code.
+
+Omitted `language` is stored as null and played in Polish (`pl`).
+
+## `GET /play/{id}/assets/{name}`
+
+`name` is `character`, `background`, `item`, `thumbnail`, or `cover`. Responds with the image bytes (`image/png`, `image/jpeg`, or `image/webp`) and `Content-Disposition: inline`. `404` when that slot was not generated. The template then draws a shape.
+
+## `POST /api/games/{id}/results`
+
+Optional. The end screen posts `{ score, total, correct, durationMs? }`. `200` is `{ "ok": true }`. The row stores `last_result` for a future analyst agent. Unknown id is `404`. This does not change `status`.
+
 ## Not in this version
 
 - Listing games
 - Audio upload
 - Auth
-- A playable URL that resolves
+- In-game hint agent and post-game analyst (the spec reserves `extensions.teammate` and `extensions.analyst`, both disabled)
+- One Vercel deployment per game. Play stays on this app.

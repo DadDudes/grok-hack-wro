@@ -6,7 +6,7 @@ let cachedKey: string | null = null;
 
 /**
  * Service-role client. Null when SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY
- * is missing, which is the local stub path. Never send this key to a browser.
+ * is missing, which is the local memory path. Never send this key to a browser.
  */
 export function getSupabaseAdmin(): SupabaseClient | null {
   const url = process.env.SUPABASE_URL?.trim();

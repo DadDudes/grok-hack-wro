@@ -12,6 +12,9 @@ export const promptLimits = {
 
 export const gameStatusSchema = z.enum(['queued', 'generating', 'ready', 'failed']);
 
+/** Fixed Phaser templates. The designer agent must pick exactly one. */
+export const gameTemplateSchema = z.enum(['collect', 'runner', 'quiz']);
+
 export const gameGraphicsSchema = z.object({
   thumbnailUrl: z.string().min(1).nullable(),
   coverUrl: z.string().min(1).nullable(),
@@ -48,6 +51,12 @@ export const gameSchema = z.object({
   childAge: z.number().int().nullable(),
   language: z.string().nullable(),
   status: gameStatusSchema,
+  /** Null until generation has chosen a template. */
+  template: gameTemplateSchema.nullable(),
+  /**
+   * Absolute URL of `GET /play/{id}` once the game is ready.
+   * Null while `queued` or `generating`, and null when `failed`.
+   */
   gameUrl: z.string().min(1).nullable(),
   graphics: gameGraphicsSchema,
   error: z.string().nullable(),
@@ -81,8 +90,22 @@ export const healthResponseSchema = z.object({
   storage: z.enum(['memory', 'supabase']),
 });
 
+/** Body for `POST /api/games/:id/results`. The in-game end screen sends this. */
+export const gameResultRequestSchema = z.strictObject({
+  score: z.number().int().min(0).max(1000),
+  total: z.number().int().min(1).max(100),
+  correct: z.number().int().min(0).max(100),
+  durationMs: z.number().int().min(0).max(3_600_000).optional(),
+});
+
+export const gameResultResponseSchema = z.object({
+  ok: z.literal(true),
+});
+
 export const apiPaths = {
   health: '/api/health',
   games: '/api/games',
   game: (id: string) => `/api/games/${id}`,
+  gameResults: (id: string) => `/api/games/${id}/results`,
+  play: (id: string) => `/play/${id}`,
 } as const;

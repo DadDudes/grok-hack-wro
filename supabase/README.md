@@ -4,7 +4,7 @@ Placeholder project for game records and generated files. The API runs without i
 
 ## Table
 
-`public.games` is created by `migrations/20261105175328_create_games.sql`.
+`public.games` is created by `migrations/20261105175328_create_games.sql`. `migrations/20261105190000_games_spec.sql` adds `template`, `spec` (jsonb), and `last_result`. Apply both before the API writes a generated game.
 
 Row Level Security is on and there are no policies for `anon` or `authenticated`. The Data API cannot read or write the table. The backend uses the service role, which bypasses RLS. Do not put that key in the frontend, and do not prefix it with `NEXT_PUBLIC_`.
 
@@ -16,10 +16,14 @@ The migration inserts the bucket. `config.toml` declares the same bucket for `su
 
 Objects live under `{gameId}/`, for example:
 
-- `{gameId}/index.html`
-- `{gameId}/thumbnail.svg`
-- `{gameId}/cover.svg`
-- `{gameId}/assets/placeholder.svg`
+- `{gameId}/spec.json`
+- `{gameId}/images/character.png` (or `.jpg` / `.webp`)
+- `{gameId}/images/background.png`
+- `{gameId}/images/item.png`
+- `{gameId}/images/thumbnail.png`
+- `{gameId}/images/cover.png`
+
+The playable page is not one of these objects. `gameUrl` is `GET /play/{id}` on the API, which embeds `spec`. The app proxies images so Phaser does not depend on Storage `Content-Disposition`.
 
 Public URL, once an object exists:
 
@@ -29,11 +33,11 @@ Public URL, once an object exists:
 
 Uploads are not granted to `anon` or `authenticated`. The service role uploads from the API. A public bucket only opens downloads. If a later client uploads with a user key, upsert needs `INSERT`, `SELECT`, and `UPDATE` policies on `storage.objects`.
 
-When `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are set, `storeGameAssets` uploads the stub HTML and SVG files with the service role and returns these public URLs. `gameUrl` points at `{gameId}/index.html`. Without those variables, nothing is uploaded and the API returns placeholder URLs on `.invalid`.
+When `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are set, the pipeline uploads images and `spec.json` with the service role. `graphics` URLs in the API still point at `/play/{id}/assets/...` on the API origin. Without those variables, nothing is uploaded and images live in the Node process that generated the game.
 
 ## Local stack
 
-This is optional for the stub.
+This is optional. Without it, the API keeps games in memory.
 
 ```bash
 supabase start

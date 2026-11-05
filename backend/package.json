@@ -2,14 +2,19 @@
   "name": "@grok-hack/api",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
+    "prebuild": "node scripts/sync-api-contract.mjs",
+    "pretest": "node scripts/sync-api-contract.mjs",
+    "pretypecheck": "node scripts/sync-api-contract.mjs",
     "dev": "next dev --port 3001",
     "build": "next build",
     "start": "next start --port 3001",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types --import ./scripts/register-alias.mjs --test lib/game-spec/fallback.test.ts lib/play/render-html.test.ts lib/games/pipeline.test.ts",
+    "exercise": "node --experimental-strip-types --import ./scripts/register-alias.mjs scripts/exercise-pipeline.ts"
   },
   "dependencies": {
-    "@grok-hack/api-contract": "file:../packages/api-contract",
     "@supabase/supabase-js": "^2.119.0",
     "next": "^16.4.5",
     "react": "^19.2.0",
