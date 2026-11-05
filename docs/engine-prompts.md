@@ -39,7 +39,7 @@ cream #F3FBF9. Rounded font Fredoka. Cute and kid-friendly, no text inside image
 Events: post every answer and the finish to the parent page as described in game-events.md.
 ```
 
-- `Game type` is one of `collect`, `runner`, `quiz_battle`.
+- `Game type` is one of the engine templates `collect`, `runner`, `quiz` (Spark's `quiz_battle` maps to `quiz`).
 - The `Visual style` line keeps the generated game in line with the app design
   (`design/web-book/`, `brandbook/assets/tokens/`).
 

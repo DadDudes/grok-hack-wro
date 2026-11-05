@@ -3,6 +3,12 @@ import { promptLimits } from '@grok-hack/api-contract';
 import { ENGINE_VISUAL_STYLE } from '@/lib/agents/visual-style';
 import type { BuildRequest, Task } from '@/lib/flow/types';
 
+const ENGINE_TEMPLATES = {
+  collect: 'collect',
+  runner: 'runner',
+  quiz_battle: 'quiz',
+} as const;
+
 const TASKS_HEADER = 'Tasks (question | answer | wrong answers | difficulty | skill):';
 const EVENTS_LINE =
   'Events: post every answer and the finish to the parent page as described in game-events.md.';
@@ -58,7 +64,7 @@ export function buildEnginePrompts(request: BuildRequest): EnginePrompts {
 
   const childLines = [
     `Kid's idea: ${oneLine(request.kidIdea)}`,
-    `Game type: ${request.option.template}`,
+    `Game type: ${ENGINE_TEMPLATES[request.option.template]}`,
     `Game title: ${oneLine(request.option.title)}`,
     `Pitch: ${oneLine(request.option.pitch)}`,
     `Visual style: ${ENGINE_VISUAL_STYLE}`,
