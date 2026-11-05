@@ -9,6 +9,9 @@ design by Bart Szczepanski.
 
 | Path | What |
 |---|---|
+| `frontend/` | Source for the product screens and the kid/parent agents. |
+| `backend/` | The app you deploy: those screens, the games API, and the Phaser host. |
+| `packages/api-contract/` | Shared request and response schemas. |
 | `specs/` | Product spec, the five agents and their prompts, design brief. Source of truth for behavior. |
 | `brandbook/index.html` | Brand Guidelines 0.1 (HTML, 32 pages). Approved. No PDF. |
 | `brandbook/assets/` | Brand assets: `logo/`, `banners/`, `mascot/`, `agents/`, `tokens/` (SVG + PNG). |
@@ -65,6 +68,24 @@ python3 brandbook/_src/export_agents.py
 python3 brandbook/_src/book_masters.py
 uv run --with playwright python brandbook/_src/svg2png.py "$PWD/brandbook/assets"
 ```
+
+## Deploy
+
+One Vercel project. Root of the upload is `backend/`. Do not push to `main` and do not merge.
+
+```bash
+npm install
+npm run sync:web
+cd backend
+npx vercel link --yes --project grok-hack-wro
+npx vercel deploy --prod --yes
+```
+
+`npm run sync:web` copies `frontend/` into `backend/` and keeps API routes, `app/play/[id]`, and
+`public/phaser/` in place. The committed copy is what a backend-only upload builds. Required
+environment variables are listed in `.env.example` and in the README deploy section. Never commit
+secrets. On Vercel set `PUBLIC_BASE_URL` to `https://grok-hack-wro.vercel.app` and leave
+`API_BASE_URL` unset.
 
 ## Working rules
 

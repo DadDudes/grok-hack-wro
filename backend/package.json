@@ -4,15 +4,18 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "prebuild": "node scripts/sync-api-contract.mjs",
+    "sync:web": "node scripts/sync-frontend.mjs",
+    "prebuild": "node scripts/sync-api-contract.mjs && node scripts/sync-frontend.mjs",
     "pretest": "node scripts/sync-api-contract.mjs",
-    "pretypecheck": "node scripts/sync-api-contract.mjs",
+    "pretypecheck": "node scripts/sync-api-contract.mjs && node scripts/sync-frontend.mjs",
+    "predev": "node scripts/sync-api-contract.mjs && node scripts/sync-frontend.mjs",
     "dev": "next dev --port 3001",
     "build": "next build",
     "start": "next start --port 3001",
     "typecheck": "tsc --noEmit",
-    "test": "node --experimental-strip-types --import ./scripts/register-alias.mjs --test lib/game-spec/fallback.test.ts lib/play/render-html.test.ts lib/games/pipeline.test.ts lib/agents/pedagog.test.ts",
+    "test": "node scripts/sync-frontend.mjs --check && node --experimental-strip-types --import ./scripts/register-alias.mjs --test lib/game-spec/fallback.test.ts lib/game-spec/request-fields.test.ts lib/play/render-html.test.ts lib/games/pipeline.test.ts lib/agents/pedagog.test.ts lib/agents/local-fallback.test.ts",
     "test:play": "playwright test",
+    "smoke": "node scripts/smoke-unified.mjs",
     "exercise": "node --experimental-strip-types --import ./scripts/register-alias.mjs scripts/exercise-pipeline.ts"
   },
   "dependencies": {

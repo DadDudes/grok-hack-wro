@@ -1,10 +1,9 @@
 import type { VercelConfig } from '@vercel/config/v1';
 
 /**
- * Vercel project Root Directory must be `backend`.
- * Install and build run in that directory. The API contract is vendored, so the
- * deploy does not need npm workspaces or files outside `backend/`.
- * Node.js on Fluid Compute is the default. Do not set the Edge runtime.
+ * Upload `backend/` as the Vercel project root (the CLI file upload is this directory).
+ * `npm run build` vendors the API contract and, when `../frontend` exists, refreshes the UI copy.
+ * A backend-only upload uses the committed UI copy. Do not set the Edge runtime.
  */
 export const config: VercelConfig = {
   framework: 'nextjs',

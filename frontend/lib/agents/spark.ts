@@ -4,7 +4,10 @@ import { z } from 'zod';
 
 import type { GameOption, GameTemplate, SparkRequest, SparkResponse } from '@/lib/flow/types';
 import { XaiError } from '@/lib/xai/errors';
+import { xaiIsConfigured } from '@/lib/xai/config';
 import { createStructuredResponse } from '@/lib/xai/responses';
+
+import { localGameOptions } from './local-fallback';
 
 import { type AgentResult, taggedData, UNTRUSTED_DATA_RULE } from './prompt';
 import { gameTemplateSchema } from './schemas';
@@ -83,6 +86,10 @@ function buildInput(request: SparkRequest): string {
 export async function suggestGameOptions(
   request: SparkRequest,
 ): Promise<AgentResult<SparkResponse>> {
+  if (!xaiIsConfigured()) {
+    return { data: { options: localGameOptions(request) }, usage: [] };
+  }
+
   const input = buildInput(request);
 
   const result = await createStructuredResponse({

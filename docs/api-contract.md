@@ -32,8 +32,11 @@ When `ready`, open `gameUrl`. That URL is `{PUBLIC_BASE_URL or request origin}/p
 | `childPrompt` | string | yes | The game the child asked for. Trimmed. 1–4000 characters. |
 | `childAge` | integer | no | 3–18. |
 | `language` | string | no | BCP 47 tag such as `pl` or `en`. 2–16 characters. |
+| `questionCount` | integer | no | 1 to 10. How many tasks to play. The Phaser page plays 3 to 10. |
+| `template` | string | no | `collect`, `runner`, `quiz`, or `quiz_battle`. `quiz_battle` is stored as `quiz`. |
+| `tasks` | array | no | 1 to 10 tasks: `id`, `question`, `answer`, `distractors` (2 or 3), `difficulty` (1, 2, or 3), optional `skill`. |
 
-Unknown fields are rejected.
+Unknown fields are rejected. A body with only `parentPrompt` and `childPrompt` still works. When `tasks` or `template` are omitted, the engine also reads the older line format in [engine-prompts.md](./engine-prompts.md) (`Questions:`, `Game type:`, `t1. question | answer | ...`). Structured fields win when both are present.
 
 ```json
 {

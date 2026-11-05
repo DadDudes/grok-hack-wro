@@ -8,12 +8,34 @@ export const promptLimits = {
   childAgeMax: 18,
   languageMinLength: 2,
   languageMaxLength: 16,
+  questionCountMin: 1,
+  questionCountMax: 10,
+  taskCountMax: 10,
+  taskIdMax: 64,
+  taskQuestionMax: 280,
+  taskAnswerMax: 80,
+  taskSkillMax: 80,
 } as const;
 
 export const gameStatusSchema = z.enum(['queued', 'generating', 'ready', 'failed']);
 
 /** Fixed Phaser templates. The designer agent must pick exactly one. */
 export const gameTemplateSchema = z.enum(['collect', 'runner', 'quiz']);
+
+/** `quiz_battle` is the kid-facing name. Generation stores it as `quiz`. */
+export const requestedTemplateSchema = z.enum(['collect', 'runner', 'quiz', 'quiz_battle']);
+
+export const createGameTaskSchema = z.strictObject({
+  id: z.string().trim().min(1).max(promptLimits.taskIdMax),
+  question: z.string().trim().min(1).max(promptLimits.taskQuestionMax),
+  answer: z.string().trim().min(1).max(promptLimits.taskAnswerMax),
+  distractors: z
+    .array(z.string().trim().min(1).max(promptLimits.taskAnswerMax))
+    .min(2)
+    .max(3),
+  difficulty: z.number().int().min(1).max(3),
+  skill: z.string().trim().min(1).max(promptLimits.taskSkillMax).optional(),
+});
 
 export const gameGraphicsSchema = z.object({
   thumbnailUrl: z.string().min(1).nullable(),
@@ -25,6 +47,8 @@ export const gameGraphicsSchema = z.object({
  * JSON body for `POST /api/games`.
  * Unknown keys are rejected. Strings are trimmed.
  * Voice input stays in the frontend: send the transcript as `childPrompt`.
+ * `questionCount`, `template`, and `tasks` are optional. Older clients that send
+ * only the two prompts still validate. `quiz_battle` means the quiz template.
  */
 export const createGameRequestSchema = z.strictObject({
   parentPrompt: z.string().trim().min(promptLimits.minLength).max(promptLimits.maxLength),
@@ -41,6 +65,14 @@ export const createGameRequestSchema = z.strictObject({
     .min(promptLimits.languageMinLength)
     .max(promptLimits.languageMaxLength)
     .optional(),
+  questionCount: z
+    .number()
+    .int()
+    .min(promptLimits.questionCountMin)
+    .max(promptLimits.questionCountMax)
+    .optional(),
+  template: requestedTemplateSchema.optional(),
+  tasks: z.array(createGameTaskSchema).min(1).max(promptLimits.taskCountMax).optional(),
 });
 
 /** One generated game. Returned by `POST /api/games` and `GET /api/games/:id`. */

@@ -4,7 +4,10 @@ import { z } from 'zod';
 
 import type { Goal, QuestionCount, Task, TaskPlan } from '@/lib/flow/types';
 import { XaiError } from '@/lib/xai/errors';
+import { xaiIsConfigured } from '@/lib/xai/config';
 import { createStructuredResponse } from '@/lib/xai/responses';
+
+import { localTaskPlan } from './local-fallback';
 
 import { type AgentResult, taggedData, UNTRUSTED_DATA_RULE } from './prompt';
 import { difficultySchema } from './schemas';
@@ -86,6 +89,10 @@ function buildInput(goal: Goal): string {
 }
 
 export async function createTaskPlan(goal: Goal): Promise<AgentResult<TaskPlan>> {
+  if (!xaiIsConfigured()) {
+    return { data: localTaskPlan(goal), usage: [] };
+  }
+
   const schema = planSchemaFor(goal.questionCount);
   const input = buildInput(goal);
 

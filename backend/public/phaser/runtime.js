@@ -233,6 +233,19 @@
     document.documentElement.dataset.gameReady = '1';
   }
 
+  function postGameEvent(type, task, answer, correct) {
+    if (!window.parent || window.parent === window) return;
+    window.parent.postMessage({
+      source: 'edubotgames-game',
+      type: type,
+      taskId: task && task.id ? task.id : null,
+      answer: answer == null ? null : String(answer),
+      correct: typeof correct === 'boolean' ? correct : null,
+      player: null,
+      at: new Date().toISOString(),
+    }, '*');
+  }
+
   function publish(scene) {
     var player = scene.player;
     window.__EDUBOT_STATE = {
@@ -396,6 +409,7 @@
     if (source !== 'click' && scene.time.now < scene.graceUntil) return;
     scene.locked = true;
     var correct = sameAnswer(choice, task.answer);
+    postGameEvent('answer', task, choice, correct);
     var message = correct ? spec.texts.correct : spec.texts.wrong + ' ' + task.explanation;
     showBanner(scene, message, correct);
     scene.time.delayedCall(correct ? 650 : 1100, function () {
@@ -633,6 +647,7 @@
     initialize: function EndScene() { Phaser.Scene.call(this, 'end'); },
     create: function () {
       mountControls('end');
+      postGameEvent('finish', null, null, null);
       var score = this.registry.get('score') || 0;
       this.choiceMarks = [];
       this.promptText = spec.texts.winTitle;

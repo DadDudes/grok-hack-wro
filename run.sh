@@ -2,8 +2,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-API_PORT=3001
-WEB_PORT=3000
+APP_PORT=3001
 MIN_NODE_MAJOR=22
 
 check_node() {
@@ -42,8 +41,7 @@ stop_all() {
 start_apps() {
   trap stop_all INT TERM
   npm run dev --prefix "$ROOT" --workspace @grok-hack/api &
-  npm run dev --prefix "$ROOT" --workspace @edubot/web &
-  echo "API: http://localhost:$API_PORT  App: http://localhost:$WEB_PORT"
+  echo "App and API: http://127.0.0.1:$APP_PORT"
   wait
 }
 

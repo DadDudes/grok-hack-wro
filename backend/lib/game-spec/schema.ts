@@ -16,8 +16,8 @@ export const paletteSchema = z.object({
 export const learningTaskSchema = z.object({
   id: z.string().min(1).max(40),
   prompt: z.string().trim().min(1).max(280),
-  answer: z.string().trim().min(1).max(40),
-  distractors: z.array(z.string().trim().min(1).max(40)).min(2).max(3),
+  answer: z.string().trim().min(1).max(80),
+  distractors: z.array(z.string().trim().min(1).max(80)).min(2).max(3),
   explanation: z.string().trim().min(1).max(280),
   difficulty: z.number().int().min(1).max(3),
 });
@@ -60,10 +60,10 @@ export const gameSpecSchema = z.object({
     thumbnailUrl: assetUrl,
     coverUrl: assetUrl,
   }),
-  tasks: z.array(learningTaskSchema).min(3).max(6),
+  tasks: z.array(learningTaskSchema).min(3).max(10),
   texts: uiTextSchema,
   rules: z.object({
-    goal: z.number().int().min(1).max(6),
+    goal: z.number().int().min(1).max(10),
   }),
   resultsUrl: z.string().min(1).max(200),
   source: z.enum(['grok', 'fallback']),

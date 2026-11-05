@@ -29,6 +29,36 @@ describe('createGameRequestSchema', () => {
 
     assert.equal(parsed.childAge, undefined);
     assert.equal(parsed.language, undefined);
+    assert.equal(parsed.questionCount, undefined);
+    assert.equal(parsed.template, undefined);
+    assert.equal(parsed.tasks, undefined);
+  });
+
+  it('accepts a question count, quiz_battle, and the task list', () => {
+    const parsed = createGameRequestSchema.parse({
+      parentPrompt: 'Multiplication up to 50',
+      childPrompt: 'Dinosaurs in space',
+      childAge: 8,
+      language: 'en',
+      questionCount: 5,
+      template: 'quiz_battle',
+      tasks: [
+        {
+          id: 't1',
+          question: '2 x 5 = ?',
+          answer: '10',
+          distractors: ['7', '12', '25'],
+          difficulty: 1,
+          skill: '2x table',
+        },
+      ],
+    });
+
+    assert.equal(parsed.questionCount, 5);
+    assert.equal(parsed.template, 'quiz_battle');
+    assert.equal(parsed.tasks?.length, 1);
+    assert.equal(parsed.tasks?.[0]?.id, 't1');
+    assert.deepEqual(parsed.tasks?.[0]?.distractors, ['7', '12', '25']);
   });
 
   it('rejects unknown fields, empty prompts, and an age outside 3–18', () => {

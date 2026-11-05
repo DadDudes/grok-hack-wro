@@ -1,7 +1,8 @@
-import type { GameTemplate } from '@grok-hack/api-contract';
+import type { CreateGameTask, GameTemplate, RequestedTemplate } from '@grok-hack/api-contract';
 
 import { templateInstructions, uiTexts } from './copy';
 import { ageBand, resolveLanguage, taskCountForAge, uiLanguage, type UiLanguage } from './language';
+import { lessonOverrides } from './request-fields';
 import {
   gameSpecSchema,
   type GameSpec,
@@ -16,9 +17,12 @@ export type SpecRequest = {
   childPrompt: string;
   childAge: number | null;
   language: string | null;
+  template?: RequestedTemplate;
+  questionCount?: number;
+  tasks?: CreateGameTask[];
 };
 
-type DraftTask = Omit<LearningTask, 'id'>;
+type DraftTask = Omit<LearningTask, 'id'> & { id?: string };
 
 type Topic = {
   id: string;
@@ -108,7 +112,7 @@ const topics: Topic[] = [
   },
   {
     id: 'numbers',
-    match: /liczb|cyfr|dodaw|mnoż|mnoz|ułam|ulam|math|number|plus/i,
+    match: /liczb|cyfr|dodaw|mnoż|mnoz|ułam|ulam|math|number|plus|multipl|times table/i,
     title: { pl: 'Liczenie', en: 'Numbers' },
     tasks: { pl: numbers, en: numbersEn },
   },
@@ -243,8 +247,9 @@ export function normalizeTasks(drafts: DraftTask[], language: UiLanguage, limit:
       if (filler.toLocaleLowerCase() === answer.toLocaleLowerCase()) continue;
       if (!distractors.includes(filler)) distractors.push(filler);
     }
+    const providedId = draft.id?.trim().slice(0, 40);
     return {
-      id: `task-${index + 1}`,
+      id: providedId && providedId.length > 0 ? providedId : `task-${index + 1}`,
       prompt: draft.prompt.trim(),
       answer,
       distractors: distractors.slice(0, 3),
@@ -269,14 +274,51 @@ export function emptyAssets(): GameSpec['assets'] {
  * Player-facing strings come from fixed banks. Raw prompts are not copied into the game,
  * so an untrusted prompt cannot inject markup or an off-topic lesson into the fallback.
  */
+function playableCount(value: number | undefined, fallbackCount: number): number {
+  const count = value ?? fallbackCount;
+  return Math.min(10, Math.max(3, count));
+}
+
+function suppliedTasks(tasks: CreateGameTask[], language: UiLanguage, limit: number): LearningTask[] {
+  const drafts: DraftTask[] = tasks.slice(0, limit).map((task) => ({
+    id: task.id,
+    prompt: task.question,
+    answer: task.answer,
+    distractors: task.distractors,
+    explanation: task.skill?.trim() || 'Look at the question again.',
+    difficulty: task.difficulty === 2 || task.difficulty === 3 ? task.difficulty : 1,
+  }));
+  return normalizeTasks(drafts, language, drafts.length);
+}
+
+function chooseTasks(primary: LearningTask[], backup: LearningTask[], limit: number): LearningTask[] {
+  if (primary.length === 0) return backup.slice(0, limit);
+  const chosen = primary.slice(0, limit);
+  if (chosen.length >= 3) return chosen;
+  for (const task of backup) {
+    if (chosen.length >= 3) break;
+    if (chosen.some((item) => item.answer.toLocaleLowerCase() === task.answer.toLocaleLowerCase())) continue;
+    chosen.push(task);
+  }
+  return chosen;
+}
+
 export function fallbackGameSpec(input: SpecRequest): GameSpec {
   const language = resolveLanguage(input.language);
   const ui = uiLanguage(language);
-  const template = pickTemplate(input.childPrompt);
+  const overrides = lessonOverrides(input);
+  const template =
+    overrides.lockTemplate && overrides.template ? overrides.template : pickTemplate(input.childPrompt);
   const topic = pickTopic(input.parentPrompt);
   const theme = pickTheme(input.childPrompt);
   const band = ageBand(input.childAge);
-  const tasks = normalizeTasks(topic.tasks[ui], ui, taskCountForAge(input.childAge));
+  const limit = playableCount(
+    overrides.questionCount ?? (overrides.tasks ? overrides.tasks.length : undefined),
+    taskCountForAge(input.childAge),
+  );
+  const bank = normalizeTasks(topic.tasks[ui], ui, limit);
+  const primary = overrides.tasks ? suppliedTasks(overrides.tasks, ui, limit) : [];
+  const tasks = chooseTasks(primary, bank, limit);
 
   return gameSpecSchema.parse({
     version: 1,
@@ -284,7 +326,7 @@ export function fallbackGameSpec(input: SpecRequest): GameSpec {
     template,
     language,
     ageBand: band,
-    title: topic.title[ui],
+    title: overrides.title ?? topic.title[ui],
     instructions: templateInstructions(ui, template),
     theme: {
       name: theme.name[ui],

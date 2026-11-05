@@ -5,6 +5,7 @@ import { generateGraphics } from '@/lib/services/generate-graphics';
 import { deployGame } from '@/lib/services/deploy-game';
 import { storeGameAssets } from '@/lib/services/store-assets';
 
+import { readGameRequest, rememberGameRequest } from './request-memory';
 import type { GameRepository } from './repository';
 import { getGameRepository } from './store';
 
@@ -14,12 +15,18 @@ import { getGameRepository } from './store';
  */
 export async function createGame(input: CreateGameRequest): Promise<Game> {
   const repository = getGameRepository();
-  return repository.insert({
+  const game = await repository.insert({
     parentPrompt: input.parentPrompt,
     childPrompt: input.childPrompt,
     childAge: input.childAge ?? null,
     language: input.language ?? null,
   });
+  rememberGameRequest(game.id, {
+    template: input.template,
+    questionCount: input.questionCount,
+    tasks: input.tasks,
+  });
+  return game;
 }
 
 export async function runGamePipeline(
@@ -34,12 +41,16 @@ export async function runGamePipeline(
     await repository.update(gameId, { status: 'generating', error: null });
     console.info('Generating game', { gameId, language: game.language ?? 'pl' });
 
+    const extra = readGameRequest(gameId);
     const built = await generateGameCode({
       gameId,
       parentPrompt: game.parentPrompt,
       childPrompt: game.childPrompt,
       childAge: game.childAge,
       language: game.language,
+      template: extra?.template,
+      questionCount: extra?.questionCount,
+      tasks: extra?.tasks,
     });
     const images = await generateGraphics(built);
     const stored = await storeGameAssets(gameId, origin, built.spec, images);
