@@ -54,8 +54,6 @@
 
 ## The problem
 
-https://github.com/user-attachments/assets/8b84e99f-d853-4711-876d-85ff2a0ca4e3
-
 - Kids use AI to get answers, and the learning gets skipped.
 - Learning apps hand every kid the same game, and kids get bored.
 - Parents and teachers can't tell whether their kid actually improved.
@@ -66,6 +64,8 @@ both into one game. Robo plays it with them and nudges with hints when they get 
 game, Lens shows the parent the score before and after, and what to practise next.
 
 ## How it works
+
+https://github.com/user-attachments/assets/8b84e99f-d853-4711-876d-85ff2a0ca4e3
 
 Five agents hand JSON to each other in a loop, and the kid watches the handoffs light up while the
 game builds.
@@ -221,7 +221,7 @@ screens use Fredoka at 18 px and up.
 
 ## Demo
 
-The promo video is at the top of [The problem](#the-problem). The 40% to 75% jump is example data
+The promo video is at the top of [How it works](#how-it-works). The 40% to 75% jump is example data
 for the demo. Join a friend appears in the video with an "Adding soon" badge.
 
 ## Brand
