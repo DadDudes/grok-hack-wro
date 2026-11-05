@@ -11,7 +11,8 @@
     "build": "next build",
     "start": "next start --port 3001",
     "typecheck": "tsc --noEmit",
-    "test": "node --experimental-strip-types --import ./scripts/register-alias.mjs --test lib/game-spec/fallback.test.ts lib/play/render-html.test.ts lib/games/pipeline.test.ts",
+    "test": "node --experimental-strip-types --import ./scripts/register-alias.mjs --test lib/game-spec/fallback.test.ts lib/play/render-html.test.ts lib/games/pipeline.test.ts lib/agents/pedagog.test.ts",
+    "test:play": "playwright test",
     "exercise": "node --experimental-strip-types --import ./scripts/register-alias.mjs scripts/exercise-pipeline.ts"
   },
   "dependencies": {
@@ -22,6 +23,7 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.1",
     "@types/node": "^22.19.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",

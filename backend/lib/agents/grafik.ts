@@ -10,10 +10,15 @@ const aspect: Record<ImageSlot, '1:1' | '16:9'> = {
   cover: '16:9',
 };
 
-function childSafePrompt(subject: string): string {
+function childSafePrompt(subject: string, slot: ImageSlot): string {
+  const framing =
+    slot === 'character' || slot === 'item'
+      ? 'One subject only, centered, isolated on a flat pure white background, no scenery, no floor, no shadow.'
+      : 'A full scene with no border and no text.';
   return [
     "A single illustration for a children's educational game.",
     'Bright, friendly, simple shapes.',
+    framing,
     'No text, no letters, no numbers, no watermark, no logo.',
     'No violence, no weapons, no scary content, no romance.',
     `Subject: ${subject}`,
@@ -32,7 +37,7 @@ export async function generateThemeImages(
   const results = await Promise.all(
     slots.map(async (slot) => {
       try {
-        const image = await xaiImage(childSafePrompt(prompts[slot]), aspect[slot]);
+        const image = await xaiImage(childSafePrompt(prompts[slot], slot), aspect[slot]);
         return [slot, image] as const;
       } catch (error) {
         console.error('Grafik skipped an image', { slot, error });
