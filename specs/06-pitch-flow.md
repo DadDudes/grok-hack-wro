@@ -4,7 +4,10 @@ Judges watch a submitted deck + promo video. No live pitch. Every slide must rea
 
 Hackathon: Grok Bot Hackathon Wroclaw, Callstack, 5 Nov 2026.
 Tracks: **Multi-agent Systems** + **Multiplayer AI**.
-One-liner: Kids design a learning game by voice, five Grok agents build it in seconds, AI teammate Robo plays with them, parent sees a before/after delta.
+Slogan (brandbook): **Parents pick the topic. Kids pick the game.**
+One-liner: Kids design a learning game by voice, five Grok agents (Robo, Prof, Spark, Doodle, Lens) build it in seconds, Robo plays on the kid's team with hints, the parent sees a before/after delta.
+
+Brand: follow 09-brand-check.md (C4 Teal Lagoon, Fredoka 600 + Figtree, PadBot logo, sticker style). Product copy is English; demo kid is Maja, 8.
 
 Judging criteria (1-5 each): Working Prototype | Technical Complexity | Innovation | Real-World Impact | Theme Alignment.
 
@@ -15,15 +18,15 @@ Slide count: **8**. Screenshot callouts = record later from the live app (or see
 ## Slide 1 - Title + track (must be readable in first 3 s of any deck recording)
 
 **On slide**
-- Logo + Robo idle (big)
+- Primary logo (PadBot lockup, `brandbook/assets/logo/lockup-dark`) on teal; Robo is the logo, do not add a second robot
 - Title: **EduBotGames**
-- Subtitle: Kids design. Agents build. Robo plays along.
+- Subtitle: Parents pick the topic. Kids pick the game.
 - Track badge (high contrast, top-right or under title):
   `TRACK: Multi-agent Systems  |  Multiplayer AI`
 - One-liner under badge (max 2 lines)
 - Footer: Grok Bot Hackathon Wroclaw · Callstack · Built with Grok Bots as teammates
 
-**Screenshot / asset:** Robo idle PNG from design export; no app screen required.
+**Screenshot / asset:** `brandbook/assets/banners/cover-1920x1080.png` as the base; no app screen required.
 
 **Criteria:** Theme Alignment (track named immediately), Innovation (one-liner).
 
@@ -38,7 +41,7 @@ Slide count: **8**. Screenshot callouts = record later from the live app (or see
 
 **Bottom strip:** Our flip → AI that teaches, not cheats.
 
-**Screenshot:** optional small S1 Parent setup crop (`/parent`) showing goal chips, so judges see a real product exists. Record later.
+**Screenshot:** optional small P-02 New goal crop, so judges see a real product exists. Record later.
 
 **Criteria:** Real-World Impact, Innovation.
 
@@ -50,17 +53,17 @@ Self-explanatory table. Judges must see multi-agent without a speaker.
 
 | Agent | Role | Input | Output | SpaceXAI model / tool |
 |---|---|---|---|---|
-| **Pedagogue** | Turns parent goal into age-fit tasks | Goal, age, optional prior Analyst report | `TaskSet` JSON (10 tasks, distractors, difficulty, skill) | **grok-4.7** via `/v1/responses` + Structured Outputs; tools: `get_last_report`, `save_tasks` |
-| **Game Designer** | Weaves kid theme into a Phaser template | Kid prompt (STT or text), TaskSet, templates | `GameSpec` JSON (template, title, theme, sprite prompts, tasks) | **grok-4.7** Responses + Structured Outputs; tools: `list_templates`, `save_game_spec` |
-| **Artist** | Draws hero, background, items | GameSpec prompts | Asset URLs | **grok-imagine-image-2.0** via `/v1/images/generations` (wrapped as `generate_image`); `get_cached_asset` |
-| **Teammate Robo** | Plays WITH kids; hints, never answers | Current task, wrong answers, player names | Hint/cheer/turn JSON | **grok-4.7** Responses; tools: `get_game_state`, `send_hint`. Optional stretch: TTS / **grok-voice-latest** realtime |
-| **Analyst** | Measures progress for parent; feeds Pedagogue | Session answers, times, hints, prior session | Report JSON (delta, skills, weak skills, next step, `pedagogue_feedback`) | **grok-4.7** Responses; tools: `get_session_results`, `save_report`, `notify_pedagogue` |
+| **Prof** (Pedagogue) | Turns parent goal into age-fit tasks | Goal, age, optional prior Analyst report | `TaskSet` JSON (10 tasks, distractors, difficulty, skill) | **grok-4.7** via `/v1/responses` + Structured Outputs; tools: `get_last_report`, `save_tasks` |
+| **Spark** (Game Designer) | Weaves kid theme into a Phaser template | Kid prompt (STT or text), TaskSet, templates | `GameSpec` JSON (template, title, theme, sprite prompts, tasks) | **grok-4.7** Responses + Structured Outputs; tools: `list_templates`, `save_game_spec` |
+| **Doodle** (Artist) | Draws hero, background, items | GameSpec prompts | Asset URLs | **grok-imagine-image-2.0** via `/v1/images/generations` (wrapped as `generate_image`); `get_cached_asset` |
+| **Robo** (Teammate, lead) | Plays WITH kids; hints, never answers | Current task, wrong answers, player names | Hint/cheer/turn JSON | **grok-4.7** Responses; tools: `get_game_state`, `send_hint`. Optional stretch: TTS / **grok-voice-latest** realtime |
+| **Lens** (Analyst) | Measures progress for parent; feeds Pedagogue | Session answers, times, hints, prior session | Report JSON (delta, skills, weak skills, next step, `pedagogue_feedback`) | **grok-4.7** Responses; tools: `get_session_results`, `save_report`, `notify_pedagogue` |
 
-**Kid voice in:** Grok Voice STT **grok-voice-transcribe-2.0** (`wss://api.x.ai/v1/stt`) → text for Designer. Text field fallback.
+**Kid voice in:** Grok Voice STT **grok-voice-transcribe-2.0** (`wss://api.x.ai/v1/stt`) → text for Spark. Text field fallback.
 
 **Footer note:** Orchestrator is plain code (not an LLM). It runs the pipeline and emits SSE events to the UI timeline.
 
-**Screenshot:** S2 AgentTimeline chips lit (`/play/[sessionId]` building state). Record later.
+**Screenshot:** K-04 Building with the crew timeline lit and the xAI call panel. Record later.
 
 **Criteria:** Technical Complexity, Theme Alignment (Multi-agent), Working Prototype (visible handoff).
 
@@ -70,40 +73,42 @@ Self-explanatory table. Judges must see multi-agent without a speaker.
 
 ```mermaid
 flowchart LR
-  P[Parent goal] --> Ped[Pedagogue]
-  Ped -->|TaskSet JSON| Des[Game Designer]
+  P[Parent goal] --> Ped[Prof Pedagogue]
+  Ped -->|TaskSet JSON| Des[Spark Game Designer]
   Kid[Kid voice / text] --> Des
-  Des -->|GameSpec JSON| Art[Artist]
-  Art -->|sprite URLs| Game[Phaser Collect game]
-  Game --> Robo[Teammate Robo]
+  Des -->|GameSpec JSON| Art[Doodle Artist]
+  Art -->|sprite URLs| Game[Phaser game from engine]
+  Game --> Robo[Robo Teammate]
   Robo -->|hints in room| Game
-  Game -->|answers| An[Analyst]
+  Game -->|answers| An[Lens Analyst]
   An -->|report + pedagogue_feedback| Ped
-  An --> Report[Parent panel]
-  Friend[Friend joins room code] --> Game
+  An --> Report[Parent panel P-04]
+  Friend[Friend joins room code, Adding soon] --> Game
 ```
 
-**Caption under diagram:** Pedagogue → Designer → Artist → Ready (shown live on S2). Teammate runs in-game. Analyst closes the loop.
+**Caption under diagram:** Prof → Spark → Doodle → Robo ready (shown live on K-04 Building). Robo plays in-game. Lens closes the loop back to Prof.
 
-**Screenshot:** full-bleed S2 timeline mid-pipeline next to the mermaid (or replace mermaid with a clean static version of the same graph if mermaid is not rendered in the deck tool).
+**Screenshot:** full-bleed K-04 timeline mid-pipeline next to the mermaid (or replace mermaid with a clean static version of the same graph if mermaid is not rendered in the deck tool).
 
 **Criteria:** Theme Alignment, Technical Complexity, Working Prototype.
 
 ---
 
-## Slide 5 - App flow (4 screens + join)
+## Slide 5 - App flow (web app screens from design/web-book)
 
-Numbered strip, left to right. Each cell = one real screen.
+Numbered strip, left to right. Each cell = one real screen (desktop 1440 wide, per brandbook decisions).
 
-| # | Screen | Route | What judges should read | Screenshot to place |
-|---|---|---|---|---|
-| S1 | Parent setup | `/parent` | Pick kid (e.g. Ola, 8), goal "mnożenie do 50", Stwórz grę | Full S1 |
-| S2 | Kid prompt + agents | `/play/[sessionId]` | Mic / text "dinozaury w kosmosie", AgentTimeline Pedagogue → Designer → Artist → Ready | S2 building |
-| S3 | Game | `/game/[gameId]` | Phaser Collect, Robo hint bubble, score, room code | S3 with hint |
-| S3b | Join (stretch) | `/join` | 4-letter code → second player avatar | Join + dual avatars |
-| S4 | Parent panel | `/report/[kidId]` | 40% → 75%, skills, next step, Zagraj znowu | S4 DeltaCard |
+| # | Screen | What judges should read | Screenshot to place |
+|---|---|---|---|
+| P-02 | New goal | Maja, 8, "Multiplication up to 50", 10 questions | `design/web-book/img/p02-new-goal.png` until live capture |
+| P-03 | Prof's preview | 10 tasks, easy to hard, editable | `p03-prof-preview.png` |
+| K-03 | Pick a game | Spark offers Collect, Runner, Quiz battle for "Dinosaurs in space" | `k03-pick-a-game.png` |
+| K-04 | Building | Crew timeline Prof → Spark → Doodle → Robo, plus xAI call panel | `k04-building.png` |
+| K-05 | Game | Phaser canvas, players Maja, Leo, Robo, Robo hint bubble | `k05-game.png` |
+| K-07 | Join a friend | Room code, "Adding soon" badge | `k07-join.png` |
+| P-04 | Lens report | 40% → 75%, per skill bars, next step | `p04-lens-report.png` |
 
-**Callout:** MVP template = Collect. Runner / Quiz battle = stretch.
+**Callout:** Spark offers 2-3 game types; the game is generated by the engine. Join a friend is "Adding soon".
 
 **Criteria:** Working Prototype, Theme Alignment (multiplayer join), Innovation (kid designs theme).
 
@@ -111,43 +116,42 @@ Numbered strip, left to right. Each cell = one real screen.
 
 ## Slide 6 - Tech stack / architecture
 
-**Left column - stack**
-- Next.js 15 App Router + TypeScript + Tailwind
-- Phaser 3 (client-only dynamic import)
-- In-memory store (`lib/store.ts`), Zod schemas, SSE for timeline + room
-- SpaceXAI global `https://api.x.ai/v1` (server Route Handlers only; key never in client)
+**Left column - stack (real repo, see 10-architecture.md)**
+- Next.js 16 API (`backend/`, port 3001) + TypeScript + zod contract package (`packages/api-contract`)
+- Supabase Postgres (games, tasks, answers, reports, xai_calls) + Storage bucket `game-assets` + Realtime for the timeline and room
+- Phaser game from the teammate's engine, served from Storage
+- Web app UI on brand tokens (`brandbook/assets/tokens/`)
+- SpaceXAI global `https://api.x.ai/v1` from server routes only; browser voice via ephemeral tokens
 
 **Right column - xAI surface area**
-- **grok-4.7** - all 5 agents, Structured Outputs, function tools
-- **grok-imagine-image-2.0** - sprites / backgrounds
+- **grok-4.7** - Prof, Spark, Robo, Lens via `/v1/responses`: Structured Outputs, function tools, `code_execution` (Lens stats), moderation `guidelines`
+- **grok-imagine-image-2.0** - Doodle's sprites / backgrounds
 - **grok-voice-transcribe-2.0** - kid speech → text (MVP)
-- Optional stretch: **grok-voice-latest** realtime / TTS for Robo
+- **TTS** `/v1/tts` for Robo hints; stretch **grok-voice-latest** realtime with ephemeral tokens
+- Live xAI call panel: model, latency, tokens, cost per call
 
 **Bottom architecture one-liner:**
-`Browser → Next.js API → Orchestrator → Agents (JSON) → Phaser GameSpec → SSE timeline / room`
+`Browser → Next.js 16 API → Orchestrator → 5 agents on xAI (JSON) → engine builds Phaser → Supabase Storage + Realtime timeline / room`
 
-**Screenshot:** optional tiny curl or network panel is NOT needed. Prefer a clean diagram. If a shot is needed, S2 Ready → S3 transition proves the pipeline.
+**Screenshot:** optional tiny curl or network panel is NOT needed. Prefer a clean diagram. If a shot is needed, K-04 done → K-05 transition proves the pipeline.
 
 **Criteria:** Technical Complexity (primary), Working Prototype.
 
 ---
 
-## Slide 7 - Design system
+## Slide 7 - Design system (from Brand Guidelines v0.1)
 
 **On slide**
-- Robo mascot: 4 poses - idle, thinking, hint, cheer (flat 2D, round head, screen face, one antenna)
-- Palette swatches with hex:
-  - Primary purple `#6C4DF6`
-  - Sunny yellow `#FFC93C`
-  - Mint `#2ED3A0`
-  - Coral `#FF6B6B`
-  - Ink `#1E1B3A`
-  - Cream `#FFF8EC`
-- Type: Baloo 2 or Nunito (kid headings), Inter (parent panel)
-- UI rules: radius 20-28, touch targets ≥ 56 px, mobile-first 390×844
-- Agent chips: colored, icon, glow when active
+- Robo = the PadBot logo: game controller face, mortarboard, tassel antenna, mitten hands. In-game poses idle, think, hint, cheer (`brandbook/assets/mascot/`)
+- The crew with props and colors: Prof `#4CC9F0`, Spark `#FF6FA5`, Doodle `#2ED3A0`, Lens `#FF8A3D`; Robo `#FFC233` bigger and first. States idle, working, handoff, done
+- Palette C4 Teal Lagoon with hex:
+  - teal `#0A7D73`, ink `#13283A`, sun `#FFC233`, tangerine `#FF8A3D`
+  - pink `#FF6FA5`, cap blue `#3A6186`, cheek `#FFB3C7`, cream `#F3FBF9`
+- Type: Fredoka 600 (headings, buttons, kid text 18 px+), Figtree (UI, parent text)
+- Style: flat fills, 3 px ink line, hard shadow `5px 6px 0 #13283A`, no gradients or blur. Buttons 56 px+, radius 20-28
+- Voice: fun older friend for kids, plain numbers for parents
 
-**Screenshot:** 2×2 collage of S1-S4 (record later), Robo poses from design export.
+**Screenshot:** a page from the Brand Guidelines PDF (crew 5.2) next to a 2x2 collage of K-03, K-04, K-05, P-04.
 
 **Criteria:** Innovation (kid-trustworthy product feel), Theme Alignment (agents visible in UI), Working Prototype (real screens).
 
@@ -156,17 +160,17 @@ Numbered strip, left to right. Each cell = one real screen.
 ## Slide 8 - Impact + close
 
 **Top half - Impact**
-- Big number: **40% → 75%** (+35 pp) from seeded before session + live after
+- Big number: **40% → 75%** (+35 pp) for Maja, labeled example data, plus the real pilot table from 08-impact-measurement.md if collected
 - Parent gets: accuracy delta, skill bars, weak skills, one next step
-- Tagline: **AI that teaches, not cheats** / **AI które uczy, nie ściąga**
+- Tagline: **AI that teaches, not cheats**
 
 **Bottom half - Close**
 - Track badge repeated: Multi-agent Systems | Multiplayer AI
-- Recap chips: 5 agents · kid voice design · Robo teammate · friends via room code · parent delta
+- Recap chips: 5 agents · kid voice design · Robo teammate · friends via room code (Adding soon) · parent delta
 - Built with Grok Bots as our hackathon teammates
 - Thank you / EduBotGames
 
-**Screenshot:** S4 DeltaCard full bleed behind the numbers.
+**Screenshot:** P-04 Lens report full bleed behind the numbers; end with the primary logo.
 
 **Criteria:** Real-World Impact, Innovation, Theme Alignment.
 
@@ -186,15 +190,15 @@ Numbered strip, left to right. Each cell = one real screen.
 
 ## Recording checklist for deck screenshots (later)
 
-1. `/` S0 Landing with Robo (optional support for slide 1)
-2. `/parent` S1 with Ola + goal chip
-3. `/play/[sessionId]` S2 idle, building (timeline), ready
-4. `/game/[gameId]` S3 Collect + Robo hint + room code
-5. `/join` S3b (only if multiplayer built)
-6. `/report/[kidId]` S4 40% → 75%
-7. Robo pose sheet: idle, thinking, hint, cheer
+1. P-02 New goal with Maja, 8, "Multiplication up to 50"
+2. P-03 Prof's preview
+3. K-03 Pick a game, K-04 Building (timeline + xAI call panel)
+4. K-05 Game with Robo hint
+5. K-07 Join a friend ("Adding soon")
+6. P-04 Lens report 40% → 75%
+7. Robo poses idle, think, hint, cheer from `brandbook/assets/mascot/`
 
-Fallback if API is down while capturing: `/game/demo` + seeded report from `lib/seed.ts`.
+Fallback if API is down while capturing: seeded game and report (see 10-architecture.md fallbacks), or the PNGs in `design/web-book/img/`.
 
 ---
 
@@ -203,6 +207,6 @@ Fallback if API is down while capturing: `/game/demo` + seeded report from `lib/
 - Multiplayer join is stretch in 05-app-flow.md. Slide 5 marks S3b as stretch; keep the cell but label it. Do not claim it as MVP unless built.
 - Robo live voice (TTS / grok-voice-latest) is stretch. Slide 3 lists STT as MVP and live voice as optional.
 - Drawing-photo → image understanding is stretch (04-api.md). Not on these slides unless shipped.
-- Before score on S4 comes from seeded session (Ola 40%), not a live first run during recording.
+- Before score on P-04 comes from seeded example data (Maja 40%), not a live first run during recording.
 - Grok Bot is named as hackathon teammates (team process), not an in-product public API, per 04-api.md.
 - Artist model id in deck: **grok-imagine-image-2.0** (from 04-api.md). Product one-liner may say "Grok Imagine"; deck uses the concrete model id for Technical Complexity.

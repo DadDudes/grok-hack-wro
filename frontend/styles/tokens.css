@@ -1,0 +1,80 @@
+:root {
+  --color-teal: #0a7d73;
+  --color-sun: #ffc233;
+  --color-tangerine: #ff8a3d;
+  --color-pink: #ff6fa5;
+  --color-cap-blue: #3a6186;
+  --color-cheek: #ffb3c7;
+  --color-ink: #13283a;
+  --color-cream: #f3fbf9;
+  --color-white: #ffffff;
+  --font-display: var(--font-fredoka), Fredoka, sans-serif;
+  --font-display-weight: 600;
+  --font-ui: var(--font-figtree), Figtree, sans-serif;
+  --text-hero: 4.4rem;
+  --text-h1: 3.2rem;
+  --text-h2: 2.4rem;
+  --text-h3: 2rem;
+  --text-body: 1.7rem;
+  --text-small: 1.5rem;
+  --text-kid-min: 1.8rem;
+  --radius-sm: 1.2rem;
+  --radius-md: 2rem;
+  --radius-lg: 2.8rem;
+  --radius-pill: 99.9rem;
+  --space-1: 0.4rem;
+  --space-2: 0.8rem;
+  --space-3: 1.2rem;
+  --space-4: 1.6rem;
+  --space-5: 2.4rem;
+  --space-6: 3.2rem;
+  --space-7: 4.8rem;
+  --space-8: 6.4rem;
+  --shadow-sticker: 0.5rem 0.6rem 0 #13283a;
+  --shadow-sticker-sm: 0.3rem 0.4rem 0 #13283a;
+  --border-ink: 0.3rem solid #13283a;
+  --button-min-height: 5.6rem;
+  --button-radius: 2.2rem;
+
+  --ground: var(--color-teal);
+  --sun: var(--color-sun);
+  --tangerine: var(--color-tangerine);
+  --pink: var(--color-pink);
+  --cap: var(--color-cap-blue);
+  --cheek: var(--color-cheek);
+  --ink: var(--color-ink);
+  --cream: var(--color-cream);
+  --white: var(--color-white);
+
+  --robo: var(--color-sun);
+  --prof: #4cc9f0;
+  --spark: var(--color-pink);
+  --doodle: #2ed3a0;
+  --lens: var(--color-tangerine);
+  --mint: #2ed3a0;
+
+  --robo-tint: #fff0c2;
+  --prof-tint: #d4f2fc;
+  --spark-tint: #ffdce9;
+  --doodle-tint: #cdf5e8;
+  --lens-tint: #ffe0cb;
+
+  --muted: #4a5c6b;
+  --line: #cfe3df;
+  --night: var(--color-cap-blue);
+  --moon: #c9ced6;
+  --chrome: #e6eeec;
+  --danger: #b3261e;
+  --danger-tint: #fde3e1;
+
+  --display: var(--font-display);
+  --sans: var(--font-ui);
+
+  --border: var(--border-ink);
+  --shadow: var(--shadow-sticker);
+  --shadow-sm: var(--shadow-sticker-sm);
+  --shadow-lg: 0.8rem 1rem 0 var(--color-ink);
+  --radius-btn: var(--button-radius);
+  --button-min: var(--button-min-height);
+  --kid-min: var(--text-kid-min);
+}

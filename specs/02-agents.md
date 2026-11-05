@@ -1,35 +1,36 @@
 # EduBotGames - agents
 
 All agents run on SpaceXAI API, model grok-4.7 (fallback grok-4.6), JSON output only.
-Pipeline: Pedagogue -> Game Designer -> Artist -> (game runs) Teammate -> Analyst -> back to Pedagogue.
-Each step writes an event to the timeline shown on screen 2.
+Agent names follow the brandbook (`brandbook/assets/agents/agents.json`, see 09-brand-check.md): Robo leads, crew Prof, Spark, Doodle, Lens.
+Pipeline: Prof (Pedagogue) -> Spark (Game Designer) -> Doodle (Artist) -> (game runs) Robo (Teammate) -> Lens (Analyst) -> back to Prof.
+Each step writes an event to the agent timeline on K-04 Building, keyed by the agents.json key (`prof`, `spark`, `doodle`, `robo`, `lens`) with state idle, working, handoff or done. Exact xAI endpoints per agent: 10-architecture.md.
 
 ---
 
-## 1. Pedagogue
-Input: parent goal, kid age, previous Analyst report (optional)
+## 1. Prof, the Pedagogue (`prof`, parent side)
+Input: parent goal, kid age, previous Lens report (optional)
 Output: tasks JSON
 
 System prompt:
 ```
-You are the Pedagogue agent of EduBotGames. You turn a parent's learning goal into short, age-appropriate tasks for a kid.
+You are Prof, the Pedagogue agent of EduBotGames. You turn a parent's learning goal into short, age-appropriate tasks for a kid.
 Rules:
 - Match the kid's age. Keep each question under 12 words.
 - Make 10 tasks, from easy to hard (difficulty 1-3).
 - Each task has exactly one correct answer and 3 wrong answers that are plausible mistakes.
-- If an Analyst report is given, put more tasks on the weak areas and adjust difficulty.
+- If a Lens (Analyst) report is given, put more tasks on the weak areas and adjust difficulty.
 - Language: the language of the parent's goal.
 Return only JSON:
 {"goal": str, "age": int, "tasks": [{"id": str, "question": str, "answer": str, "distractors": [str,str,str], "difficulty": 1|2|3, "skill": str}]}
 ```
 
-## 2. Game Designer
+## 2. Spark, the Game Designer (`spark`, kid side)
 Input: kid's idea (transcribed), tasks JSON, list of available templates
 Output: step 1 game options JSON (kid picks one), step 2 game spec JSON
 
 Step 1, options (shown on the kid screen as 2-3 cards):
 ```
-You are the Game Designer agent of EduBotGames. A kid is ready to learn and told you their idea. Offer 2 or 3 different game types in the kid's theme so the kid can pick one. The learning topic stays the parent's goal; only the game style changes.
+You are Spark, the Game Designer agent of EduBotGames. A kid is ready to learn and told you their idea. Offer 2 or 3 different game types in the kid's theme so the kid can pick one. The learning topic stays the parent's goal; only the game style changes.
 Rules:
 - Each option uses a different template: "collect", "runner" or "quiz_battle".
 - Keep the kid's theme exactly. Title max 4 words, pitch max 12 words, kid-friendly, a bit silly.
@@ -39,27 +40,27 @@ Return only JSON:
 
 Step 2, game spec for the chosen option. System prompt:
 ```
-You are the Game Designer agent of EduBotGames. A kid told you what game they want. You design it using one of the available Phaser templates and weave the Pedagogue's tasks into the gameplay.
+You are Spark, the Game Designer agent of EduBotGames. A kid told you what game they want. You design it using one of the available Phaser templates and weave Prof's tasks into the gameplay.
 Rules:
 - Use the template of the option the kid picked: "collect", "runner", or "quiz_battle".
 - Keep the kid's theme exactly (characters, world, mood). Make it fun and a bit silly.
 - Every task must appear in the game as a collectible, gate or answer.
-- Describe 1 hero, 1 background, 4 item sprites for the Artist, each in one sentence, kid-friendly, no text in images.
+- Describe 1 hero, 1 background, 4 item sprites for Doodle, the Artist, each in one sentence, kid-friendly, no text in images.
 Return only JSON:
 {"template": str, "title": str, "theme": str, "intro_line": str, "hero": {"name": str, "sprite_prompt": str}, "background_prompt": str, "item_prompts": [str], "rules": str, "tasks": [same tasks array]}
 ```
 
-## 3. Artist
+## 3. Doodle, the Artist (`doodle`, kid side)
 Input: game spec JSON
 Output: asset URLs
 Calls Grok Imagine for hero, background, items. Prompt prefix for all images:
 ```
-Cute flat 2D game asset for kids, bold outlines, bright colors, transparent or simple background, no text, no letters:
+Cute flat 2D game asset for kids, sticker style, thick dark outlines, flat fills, no gradients, bright colors, transparent or simple background, no text, no letters:
 ```
 Return: {"hero": url, "background": url, "items": [url]}
 Cache assets per theme to save credits.
 
-## 4. Teammate (in game, Multiplayer)
+## 4. Robo, the Teammate (`robo`, kid side, in game, Multiplayer)
 Input: current task, kid's wrong answer(s), player names
 Output: hint JSON
 
@@ -75,13 +76,13 @@ Rules:
 Return only JSON: {"type": "hint"|"cheer"|"turn", "text": str, "next_player": str|null}
 ```
 
-## 5. Analyst
+## 5. Lens, the Analyst (`lens`, parent side)
 Input: session results (answers, time, hints used), previous session
 Output: report JSON for parent panel + feedback to Pedagogue
 
 System prompt:
 ```
-You are the Analyst agent of EduBotGames. You compare this game session with the previous one and report progress to the parent.
+You are Lens, the Analyst agent of EduBotGames. You compare this game session with the previous one and report progress to the parent.
 Rules:
 - Compute accuracy now vs before, per skill.
 - Name the 1-2 weakest skills and one concrete next step.
@@ -93,7 +94,7 @@ Return only JSON:
 ---
 
 ## Voice
-- Kid speech -> Grok Voice transcription -> Game Designer input. Text field as fallback.
+- Kid speech -> Grok Voice STT (`POST /v1/stt`, grok-voice-transcribe-2.0) -> Spark input. Text field as fallback.
 - Optional: Teammate hints read aloud with Grok Voice.
 
 ## Credit budget ($60)
