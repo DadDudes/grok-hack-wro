@@ -1,4 +1,5 @@
-import { demoBuild, demoHint, demoOptions, demoPlan, demoReport } from './mock';
+import { sessionReport } from './sessionReport';
+import { demoBuild, demoHint, demoOptions, demoPlan } from './mock';
 import {
   flowPaths,
   type BuildEvent,
@@ -88,7 +89,7 @@ export async function askRobo(request: HintRequest): Promise<Hint> {
 export async function getReport(request: LensRequest): Promise<Report> {
   if (isMockMode()) {
     await wait(MOCK_DELAY_MS);
-    return demoReport;
+    return sessionReport(request);
   }
 
   return postJson<Report>(flowPaths.lens, request);

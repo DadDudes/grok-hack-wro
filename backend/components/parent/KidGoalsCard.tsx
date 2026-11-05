@@ -32,6 +32,10 @@ function lastResult(goals: GoalRecord[]): string {
     return 'No result yet';
   }
 
+  if (withReport.report.accuracyNow === null) {
+    return 'No score yet';
+  }
+
   return `Last result ${percentOf(withReport.report.accuracyNow)}%`;
 }
 

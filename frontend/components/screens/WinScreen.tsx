@@ -7,7 +7,7 @@ import { Icon } from '../Icon';
 import { KidAvatar } from '../KidAvatar';
 import { KidShell } from '../kid/KidShell';
 import { useKidContext } from '../kid/useKidContext';
-import { correctByPlayer, playerNames, sessionStats, starsFor } from '../state/derive';
+import { correctByPlayer, playerNames, sessionStats, starsFor, winHeadline } from '../state/derive';
 
 const CONFETTI = [
   'cf w1',
@@ -97,7 +97,7 @@ export function WinScreen() {
             <use href="#star-st" />
           </svg>
         </div>
-        <h1 className="h-kid win-title">You did it, {kid.name}!</h1>
+        <h1 className="h-kid win-title">{winHeadline(kid.name, stats.solved, stats.total)}</h1>
         <div className="win-row">
           <div className="lead win-lead">
             <Agent agent="robo" pose="done" size="s240" motion="done" alt="Robo cheering" badge="ok-xl" />

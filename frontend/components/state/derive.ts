@@ -118,6 +118,18 @@ export function sessionStats(session: SessionResult, plan: TaskPlan): SessionSta
   };
 }
 
+export function winHeadline(name: string, solved: number, total: number): string {
+  if (total > 0 && solved >= total) {
+    return `You did it, ${name}!`;
+  }
+
+  if (solved <= 0) {
+    return `Good try, ${name}!`;
+  }
+
+  return `Nice work, ${name}!`;
+}
+
 export function starsFor(solved: number, total: number): number {
   if (total === 0) {
     return 1;

@@ -72,6 +72,7 @@
   "lib/flow/client.ts",
   "lib/flow/hintTurn.ts",
   "lib/flow/mock.ts",
+  "lib/flow/sessionReport.ts",
   "lib/flow/types.ts",
   "lib/games-api/client.ts",
   "lib/games-api/origin.ts",

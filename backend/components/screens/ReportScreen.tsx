@@ -67,7 +67,11 @@ export function ReportScreen() {
     return <EmptyReport kid={kid} hasPlan={plan !== null} />;
   }
 
-  const reportKey = `${lastSession.gameId}-${lastSession.seconds}-${lastSession.events.length}`;
+  const answerKey = lastSession.events
+    .filter((event) => event.type === 'answer')
+    .map((event) => `${event.taskId ?? ''}:${String(event.correct)}`)
+    .join('|');
+  const reportKey = `${lastSession.gameId}:${lastSession.hintsUsed}:${answerKey}`;
 
   return (
     <ReportView
@@ -252,9 +256,11 @@ type ReportBodyProps = {
 
 function ReportBody({ report, plan, kid, session }: ReportBodyProps) {
   const stats = sessionStats(session, plan);
-  const before = percentOf(report.accuracyBefore);
-  const now = percentOf(report.accuracyNow);
-  const points = percentOf(report.delta);
+  const hasNow = report.accuracyNow !== null;
+  const hasBefore = report.accuracyBefore !== null && report.delta !== null;
+  const now = hasNow ? percentOf(report.accuracyNow ?? 0) : 0;
+  const before = hasBefore ? percentOf(report.accuracyBefore ?? 0) : 0;
+  const points = hasBefore ? percentOf(report.delta ?? 0) : 0;
   const isUp = points >= 0;
   const pointsLabel = isUp ? `+${points} points` : `${points} points`;
   const upClass = isUp ? 'up' : 'up down';
@@ -262,6 +268,7 @@ function ReportBody({ report, plan, kid, session }: ReportBodyProps) {
   const weakTasks = plan.tasks.filter((task) => report.weakSkills.includes(task.skill));
   const nextTasks = weakTasks.slice(0, NEXT_TASKS_SHOWN);
   const hasWeakSkills = report.weakSkills.length > 0;
+  const planSkills = report.bySkill.map((score) => score.skill);
 
   return (
     <>
@@ -270,15 +277,24 @@ function ReportBody({ report, plan, kid, session }: ReportBodyProps) {
           <h2 className="ptitle" id="accuracy-title">
             Accuracy
           </h2>
-          <div className="delta">
-            <span className="was">{before}%</span>
-            <Icon name="arrow" />
-            <span className="now">{now}%</span>
-            <span className={upClass}>
-              <Icon name={upIcon} />
-              {pointsLabel}
-            </span>
-          </div>
+          {hasNow && hasBefore ? (
+            <div className="delta">
+              <span className="was">{before}%</span>
+              <Icon name="arrow" />
+              <span className="now">{now}%</span>
+              <span className={upClass}>
+                <Icon name={upIcon} />
+                {pointsLabel}
+              </span>
+            </div>
+          ) : null}
+          {hasNow && !hasBefore ? (
+            <div className="delta">
+              <span className="now">{now}%</span>
+              <span>this session</span>
+            </div>
+          ) : null}
+          {!hasNow ? <p className="p-par">No score yet. This session has no answers.</p> : null}
           <div className="talk">
             <Agent agent="lens" pose="done" size="s88" motion="done" alt="Lens, done" />
             <p className="say l lens par">{report.parentSummary}</p>
@@ -319,18 +335,29 @@ function ReportBody({ report, plan, kid, session }: ReportBodyProps) {
             <Agent agent="prof" pose="head" size="s60" alt="Prof" />
           </div>
           <p className="p-par">
-            Lens passes the weak skills to Prof. {report.pedagogueFeedback}
+            {report.measured
+              ? `Lens passes the weak skills to Prof. ${report.pedagogueFeedback}`
+              : report.pedagogueFeedback}
           </p>
-          {hasWeakSkills ? (
+          {!report.measured ? (
+            <div className="weak">
+              <b>This plan:</b>
+              {planSkills.map((skill) => (
+                <span key={skill}>{skill}</span>
+              ))}
+            </div>
+          ) : null}
+          {report.measured && hasWeakSkills ? (
             <div className="weak">
               <b>Weak:</b>
               {report.weakSkills.map((skill) => (
                 <span key={skill}>{skill}</span>
               ))}
             </div>
-          ) : (
-            <p className="p-par">No weak skills this time. {kid.name} can try a harder goal.</p>
-          )}
+          ) : null}
+          {report.measured && !hasWeakSkills ? (
+            <p className="p-par">No weak skills in the answers this time.</p>
+          ) : null}
           {nextTasks.length > 0 && (
             <ul className="minitasks" aria-label="Tasks to practise">
               {nextTasks.map((task) => (
@@ -358,18 +385,27 @@ function ReportBody({ report, plan, kid, session }: ReportBodyProps) {
           </span>
         </div>
         {report.bySkill.map((score) => {
-            const beforePercent = percentOf(score.before);
-            const nowPercent = percentOf(score.now);
+            const played = score.now !== null;
+            const beforePercent = score.before === null ? null : percentOf(score.before);
+            const nowPercent = played ? percentOf(score.now ?? 0) : null;
 
             return (
               <div className="skw" key={score.skill}>
                 <span>{score.skill}</span>
                 <div className="bars" aria-hidden="true">
-                  <i className={widthClass(score.before)} />
-                  <i className={`now ${widthClass(score.now)}`} />
+                  {score.before !== null ? <i className={widthClass(score.before)} /> : null}
+                  {played ? <i className={`now ${widthClass(score.now ?? 0)}`} /> : null}
                 </div>
                 <b>
-                  <small>{beforePercent}% →</small> {nowPercent}%
+                  {nowPercent === null ? (
+                    'Not played'
+                  ) : beforePercent === null ? (
+                    `${nowPercent}%`
+                  ) : (
+                    <>
+                      <small>{beforePercent}% →</small> {nowPercent}%
+                    </>
+                  )}
                 </b>
               </div>
             );
