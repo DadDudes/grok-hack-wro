@@ -33,7 +33,10 @@ FONT = (
 SYMBOLS = ('+', '×', '÷', '=')
 CONFETTI_COLORS = (P['pad'], P['accent'], P['body'], P['cheek'])
 SLOGAN_LINES = ('Parents pick the topic.', 'Kids pick the game.')
-CHIP_TEXT = 'AI that teaches, not cheats.'
+HOOK_LINES = ('Screen time is huge.', "Learning time isn't.")
+HOOK_CHAR_WIDTH = 0.48
+HOOK_PAD = 0.62
+HOOK_HEIGHT = 1.5
 
 
 def svg_doc(inner, w, h, view=None):
@@ -81,15 +84,33 @@ def slogan(x, y, size, gap, fill, anchor='start'):
     return out
 
 
-def chip(x, y, w, h, size):
+def sticker_box(x, y, w, h, rx, fill, text, size):
     ink = P['ink']
     text_y = y + h / 2 + size * 0.35
     return (
-        f'<rect x="{x + 6}" y="{y + 7}" width="{w}" height="{h}" rx="{h / 2}" fill="{ink}"/>'
-        f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{h / 2}" fill="{P["pad"]}" '
+        f'<rect x="{x + 6}" y="{y + 7}" width="{w}" height="{h}" rx="{rx}" fill="{ink}"/>'
+        f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{rx}" fill="{fill}" '
         f'stroke="{ink}" stroke-width="5"/>'
         f'<text x="{x + w / 2}" y="{text_y}" font-size="{size}" fill="{ink}" '
-        f'text-anchor="middle">{CHIP_TEXT}</text>'
+        f'text-anchor="middle">{text}</text>'
+    )
+
+
+def hook(x, y, size, anchor='start'):
+    first, second = HOOK_LINES
+    height = size * HOOK_HEIGHT
+    pad = size * HOOK_PAD
+    first_w = len(first) * size * HOOK_CHAR_WIDTH + 2 * pad
+    second_w = len(second) * size * HOOK_CHAR_WIDTH + 2 * pad
+    first_x = x
+    second_x = x + size * 0.8
+    if anchor == 'middle':
+        first_x = x - first_w / 2
+        second_x = x - second_w / 2 + size * 0.4
+    second_y = y + height + size * 0.55
+    return (
+        sticker_box(first_x, y, first_w, height, height * 0.2, WHITE, first, size)
+        + sticker_box(second_x, second_y, second_w, height, height / 2, P['pad'], second, size)
     )
 
 
@@ -116,8 +137,7 @@ def cover():
         + confetti(spots)
         + place(mark(), 120, 130, 230)
         + wordmark(120, 530, 150, ON_TEAL)
-        + slogan(124, 630, 66, 80, WHITE)
-        + chip(120, 760, 780, 92, 44)
+        + hook(120, 600, 62)
         + place(figure('cheer'), 1130, 170, 740)
     )
     return svg_doc(inner, 1920, 1080)
@@ -138,8 +158,7 @@ def vertical():
         + place(mark(), 430, 130, 220)
         + wordmark(540, 500, 140, ON_TEAL, 'middle')
         + place(figure('cheer'), 150, 560, 780)
-        + slogan(540, 1480, 76, 95, WHITE, 'middle')
-        + chip(150, 1660, 780, 96, 46)
+        + hook(540, 1440, 66, 'middle')
     )
     return svg_doc(inner, 1080, 1920)
 
@@ -156,8 +175,7 @@ def readme():
         + confetti(spots)
         + place(mark(), 80, 60, 170)
         + wordmark(80, 360, 112, ON_CREAM)
-        + slogan(84, 428, 40, 50, P['ink'])
-        + chip(80, 510, 560, 70, 33)
+        + hook(80, 400, 38)
         + place(figure('idle'), 790, 80, 480)
     )
     return svg_doc(inner, 1280, 640)
