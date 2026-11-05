@@ -2,7 +2,7 @@
   <img
     src="brandbook/assets/banners/readme-1280x640.png"
     width="100%"
-    alt="EduBotGames banner: Robo, a yellow game controller with a face and a mortarboard, next to the slogan Parents pick the topic. Kids pick the game."
+    alt="EduBotGames banner: Robo, a yellow game controller with a face and a mortarboard, next to the line Screen time is huge. Learning time isn't."
   >
 </p>
 
@@ -44,6 +44,7 @@
 <p align="center">
   <a href="#how-it-works">How it works</a> ·
   <a href="#meet-the-crew">Crew</a> ·
+  <a href="#under-the-hood-agents-on-the-grok-api">Under the hood</a> ·
   <a href="#screens">Screens</a> ·
   <a href="#why-it-wins">Why it wins</a> ·
   <a href="#demo">Demo</a> ·
@@ -75,7 +76,7 @@ game builds.
    3 game types in that theme, and the kid picks one.
 3. <img src="brandbook/assets/agents/doodle-head.png" width="48" alt="Doodle"> **The crew builds it.**
    Spark weaves the tasks into the game. Doodle, the Artist, paints the hero, the background and the
-   items with Grok Imagine. The game engine, built by a teammate, takes the parent's inputs (topic,
+   items with Grok Imagine. The game engine, built by Cezary Dynak, takes the parent's inputs (topic,
    age, number of questions) and the kid's (voice idea, chosen game type) and generates a Phaser game.
 4. <img src="brandbook/assets/agents/robo-head.png" width="48" alt="Robo"> **Robo plays on the kid's team.**
    A wrong answer gets a short hint. A second wrong answer gets a stronger hint. Robo never says the
@@ -106,6 +107,87 @@ Every agent has four motion states for the build timeline: idle, working, handof
 | <img src="brandbook/assets/mascot/padbot-idle.png" width="120" alt="Robo idle"> | <img src="brandbook/assets/mascot/padbot-think.png" width="120" alt="Robo thinking"> | <img src="brandbook/assets/mascot/padbot-hint.png" width="120" alt="Robo giving a hint"> | <img src="brandbook/assets/mascot/padbot-cheer.png" width="120" alt="Robo cheering"> |
 |:---:|:---:|:---:|:---:|
 | Idle | Thinking | Hint | Cheering a right answer |
+
+## Under the hood: agents on the Grok API
+
+Every agent is its own server-side module with its own prompt, its own JSON schema and its own
+guardrail. A plain-code orchestrator chains them and streams each step to the kid's screen, so the
+handoffs light up live.
+
+```mermaid
+flowchart LR
+  subgraph App["frontend/ (Next.js, browser + route handlers)"]
+    UI[Parent and kid screens]
+    API[Route handlers /api/agents, /api/build, /api/voice]
+  end
+  subgraph XAI["SpaceXAI API (key stays on the server)"]
+    R[Responses API grok-4.7, structured outputs]
+    I[Grok Imagine grok-imagine-image-2.0]
+    S[Speech to text]
+  end
+  subgraph Engine["backend/ (game engine API)"]
+    G[POST /api/games, GET /api/games/:id]
+    DB[(Supabase: games + assets)]
+  end
+  UI --> API
+  API --> R
+  API --> I
+  API --> S
+  API -- parent + kid prompts --> G
+  G --> DB
+  G -- gameUrl --> UI
+  UI -- game events, postMessage --> API
+```
+
+| Agent | Route | Grok API | In -> out | Guardrail |
+|---|---|---|---|---|
+| Prof, the parent's agent | `POST /api/agents/prof` | Responses API, `grok-4.7`, JSON schema | Parent's free text, age, count -> one clear goal + 10 tasks | One right answer and three likely mistakes per task, easy to hard |
+| Spark, the kid's agent | `POST /api/agents/spark` | Responses API, JSON schema | Kid's idea + parent's topic -> 2-3 game types | Each option is a different template whose mechanic practises the topic |
+| Doodle | `POST /api/agents/doodle/options` | Grok Imagine | Kid's theme + game type -> one scene per option | Brand style, no text, cached by theme and type |
+| Robo | `POST /api/agents/robo` | Responses API, JSON schema | Task + wrong answers + players -> hint, cheer or turn | Never says the answer |
+| Lens | `POST /api/agents/lens` | Responses API | Game events -> report | Accuracy is computed in code; the model only writes the summary and the next step |
+| Voice | `POST /api/voice/transcribe` | Speech to text | Kid's recording -> text | Text field as a fallback |
+| Orchestrator | `POST /api/build` (Server-Sent Events) | none, plain code | Plan + chosen game -> agent events, preview, game | Validates every body with zod before any call |
+
+Why this is multi-agent and not one big prompt:
+
+- Two agents serve two people. Prof answers the parent's question, "what does my child need to
+  learn?". Spark answers the kid's, "how can this be a game?".
+- Handoffs are typed. Prof's tasks go to Spark, Spark's choice goes to Doodle and to the engine,
+  game events go to Lens, and Lens's weak skills go back to Prof for the next round.
+- The engine gets plain-text prompts built from the agents' output, including the visual style, so
+  the generated game matches the app ([docs/engine-prompts.md](docs/engine-prompts.md)).
+
+### Measured on the live API (5 Nov 2026)
+
+Kid's idea "unicorns on the beach", parent's text "she cannot read the clock yet", age 7.
+
+| Step | Result | Time | Cost |
+|---|---|---|---|
+| Prof | Goal "Read the time on a clock", 10 tasks from full hours to quarter hours | 17.7 s | $0.0129 |
+| Spark | Unicorn Clock Shells (collect), Unicorn Time Dash (runner), Beach Clock Battle (quiz battle) | 5.2 s | $0.0055 |
+| Doodle | 3 scenes drawn in parallel, unicorns on a beach in the brand palette | 19.2 s | $0.12 |
+| Doodle, repeat | Same scenes from the cache | 8 ms | $0 |
+| Build | Preview reused from the cache, engine call done | 1.29 s | $0 |
+| Speech to text | "I want a game with dinosaurs in space." | 0.68 s | about $0.0001 |
+| Robo | "Super close! Start from 7 x 7, then add one more group of 7." | 5.7 s | under $0.01 |
+
+All test rounds so far cost about $0.31 of the $60 budget.
+
+### Status
+
+- Live: Prof, Spark, Doodle, Robo, speech to text, the build stream and the call to the engine API.
+- The engine itself still returns a placeholder game; real game generation is in progress in
+  `backend/`.
+- Game events: the game posts answers to the app with `postMessage`
+  ([docs/game-events.md](docs/game-events.md)). Until the engine sends them, Lens uses the demo
+  report.
+- Login is a demo account ([tests/test-accounts.md](tests/test-accounts.md)).
+
+Code: agents in [`frontend/lib/agents/`](frontend/lib/agents), the xAI client in
+[`frontend/lib/xai/`](frontend/lib/xai), routes in [`frontend/app/api/`](frontend/app/api), the
+engine API in [`backend/`](backend) with its contract in
+[`packages/api-contract`](packages/api-contract).
 
 ## Screens
 
@@ -250,6 +332,9 @@ flowchart LR
 ## Project structure
 
 ```text
+frontend/       the web app: screens, agents, route handlers (Next.js)
+backend/        the game engine API (Next.js), Supabase storage
+packages/       shared API contract (zod)
 specs/          product spec, agents and prompts, design brief, API, app flow, pitch, video script
 brandbook/      Brand Guidelines (index.html), assets, tokens, decisions, build scripts in _src/
 design/
@@ -268,10 +353,18 @@ Start with the specs:
 
 ## Getting started
 
-The app code lands next, and its setup steps will go here.
+Needs Node 22 or newer. Put `XAI_API_KEY` (and the Supabase keys for the engine) in `.env`, then:
 
-Today you can open the Brand Guidelines (`brandbook/index.html`) in a browser and rebuild the brand
-assets:
+```bash
+./run.sh
+```
+
+It installs the workspaces, writes `frontend/.env.local` and `backend/.env.local` from `.env`, and
+starts the engine API on http://localhost:3001 and the app on http://localhost:3000. Log in with the
+demo account from [tests/test-accounts.md](tests/test-accounts.md). Set `NEXT_PUBLIC_FLOW_MOCK=1`
+in `frontend/.env.local` to run the whole flow on demo data without any API calls.
+
+Rebuild the brand assets:
 
 ```bash
 python3 brandbook/_src/export.py
@@ -282,8 +375,7 @@ uv run --with playwright python brandbook/_src/svg2png.py "$PWD/brandbook/assets
 
 ## Team and credits
 
-- Concept: Cezary Dynak and Bart Szczepanski
+- Concept: Cezary Dynak (backend, engine) and Bart Szczepanski (frontend, agents)
 - Design and brand: Bart Szczepanski
-- Game engine: built by a teammate
 - Built at Grok Bot Hackathon Wroclaw, 5 Nov 2026, on the SpaceXAI (Grok) API
 - Fonts: Fredoka and Figtree from Google Fonts
